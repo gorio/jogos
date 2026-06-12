@@ -1,7 +1,7 @@
 class AuthManager {
   constructor() {
     this.auth = null;
-    this.user = null;
+    this.user = undefined;
     this.uid = null;
     this.displayName = null;
     this.email = null;
