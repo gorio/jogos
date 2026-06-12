@@ -67,7 +67,6 @@
       </a>
       <nav class="header-nav" aria-label="Navegação principal">
         <a href="#games">Jogos</a>
-        <a href="#ecosystem">Ecossistema</a>
       </nav>
       <div class="header-user">
         <img id="header-photo" class="header-photo hidden" alt="Foto do usuário" />
@@ -79,9 +78,9 @@
 
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Ecossistema unificado</p>
-        <h1>Escolha o tabuleiro e continue com a mesma conta.</h1>
-        <p>O portal centraliza login, identidade e acesso aos jogos. Os tabuleiros agora vivem em um único repositório, com navegação e visual mais consistentes.</p>
+        <p class="eyebrow">Jogos online</p>
+        <h1>Escolha um tabuleiro para jogar agora.</h1>
+        <p>Entre em uma partida contra a IA, crie uma sala online ou continue explorando os clássicos em uma única conta.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#games">Ver jogos</a>
           <button id="btn-open-last" class="btn btn-secondary">Abrir último jogo</button>
@@ -104,7 +103,9 @@
 
       <div id="games-grid" class="games-grid">
         <article class="game-card" data-game="xadrez">
-          <div class="game-preview chess-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board portal-chess" data-preview-board="xadrez"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Estratégia clássica</span>
             <h3>Xadrez</h3>
@@ -115,7 +116,9 @@
         </article>
 
         <article class="game-card" data-game="dama">
-          <div class="game-preview dama-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board portal-dama" data-preview-board="dama"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Captura e avanço</span>
             <h3>Dama</h3>
@@ -126,7 +129,9 @@
         </article>
 
         <article class="game-card" data-game="ludo">
-          <div class="game-preview ludo-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board portal-ludo" data-preview-board="ludo"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Tabuleiro em família</span>
             <h3>Ludo</h3>
@@ -137,7 +142,9 @@
         </article>
 
         <article class="game-card" data-game="trilha">
-          <div class="game-preview trilha-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board trilha-preview"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Moinhos e bloqueios</span>
             <h3>Trilha</h3>
@@ -148,7 +155,9 @@
         </article>
 
         <article class="game-card" data-game="resta-um">
-          <div class="game-preview resta-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board resta-preview"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Quebra-cabeça solo</span>
             <h3>Resta Um</h3>
@@ -159,7 +168,9 @@
         </article>
 
         <article class="game-card" data-game="jogo-da-velha">
-          <div class="game-preview velha-preview" aria-hidden="true"></div>
+          <div class="game-preview" aria-hidden="true">
+            <div class="portal-board velha-preview"></div>
+          </div>
           <div class="game-body">
             <span class="game-kicker">Rápido e direto</span>
             <h3>Jogo da Velha</h3>
@@ -171,30 +182,6 @@
       </div>
     </section>
 
-    <section id="ecosystem" class="ecosystem-section">
-      <div class="section-heading">
-        <p class="eyebrow">Arquitetura</p>
-        <h2>Base para um ecossistema único</h2>
-      </div>
-      <div class="ecosystem-grid">
-        <div>
-          <strong>Conta única</strong>
-          <span>Firebase Auth compartilhado no domínio `gorio.github.io`.</span>
-        </div>
-        <div>
-          <strong>Design system</strong>
-          <span>CSS central para header, login, botões, cards, lobby e estados.</span>
-        </div>
-        <div>
-          <strong>Jogos modulares</strong>
-          <span>Cada motor pode migrar para `/games/xadrez`, `/games/dama` e `/games/ludo`.</span>
-        </div>
-        <div>
-          <strong>Histórico unificado</strong>
-          <span>Próximo passo: normalizar partidas, rankings e salas em um contrato comum.</span>
-        </div>
-      </div>
-    </section>
   </main>
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
