@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jogos de Tabuleiro Online</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>♟</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="screen-auth" class="screen active auth-screen">
+    <section class="auth-visual" aria-label="Jogos de tabuleiro online">
+      <div class="brand-mark">
+        <span>♟</span>
+        <span>●</span>
+        <span>🎲</span>
+      </div>
+      <h1>Jogos de Tabuleiro Online</h1>
+      <p>Um login, uma identidade e uma coleção de partidas para Xadrez, Dama e Ludo.</p>
+      <div class="board-showcase" aria-hidden="true">
+        <div class="mini-board chess-board"></div>
+        <div class="mini-board checkers-board"></div>
+        <div class="mini-board ludo-board-preview"></div>
+      </div>
+    </section>
+
+    <section class="auth-panel" aria-label="Autenticação">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Entrar</button>
+          <button class="auth-tab" data-tab="register">Cadastrar</button>
+        </div>
+
+        <div id="tab-login" class="tab-panel">
+          <button id="btn-login-google" class="btn btn-google btn-full">
+            <span class="google-dot"></span>
+            Entrar com Google
+          </button>
+          <div class="divider"><span>ou com e-mail</span></div>
+          <input id="login-email" class="form-input" type="email" placeholder="E-mail" autocomplete="email" />
+          <input id="login-password" class="form-input" type="password" placeholder="Senha" autocomplete="current-password" />
+          <button id="btn-login-email" class="btn btn-primary btn-full">Entrar</button>
+        </div>
+
+        <div id="tab-register" class="tab-panel hidden">
+          <button id="btn-register-google" class="btn btn-google btn-full">
+            <span class="google-dot"></span>
+            Cadastrar com Google
+          </button>
+          <div class="divider"><span>ou com e-mail</span></div>
+          <input id="reg-name" class="form-input" type="text" placeholder="Nome de exibição" autocomplete="name" />
+          <input id="reg-email" class="form-input" type="email" placeholder="E-mail" autocomplete="email" />
+          <input id="reg-password" class="form-input" type="password" placeholder="Senha (mín. 6 caracteres)" autocomplete="new-password" />
+          <button id="btn-register" class="btn btn-primary btn-full">Criar conta</button>
+        </div>
+
+        <p id="auth-error" class="error-msg" role="alert"></p>
+      </div>
+    </section>
+  </main>
+
+  <main id="screen-hub" class="screen hub-screen">
+    <header class="app-header">
+      <a class="header-brand" href="./" aria-label="Jogos de Tabuleiro Online">
+        <span class="header-symbol">♟</span>
+        <span>Jogos</span>
+      </a>
+      <nav class="header-nav" aria-label="Navegação principal">
+        <a href="#games">Jogos</a>
+        <a href="#ecosystem">Ecossistema</a>
+      </nav>
+      <div class="header-user">
+        <img id="header-photo" class="header-photo hidden" alt="Foto do usuário" />
+        <div id="header-initials" class="header-initials">?</div>
+        <span id="header-username"></span>
+        <button id="btn-logout" class="btn btn-ghost btn-small">Sair</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Ecossistema unificado</p>
+        <h1>Escolha o tabuleiro e continue com a mesma conta.</h1>
+        <p>O portal centraliza login, identidade e acesso aos jogos. Xadrez, Dama e Ludo passam a viver sob uma experiência comum.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#games">Ver jogos</a>
+          <button id="btn-open-last" class="btn btn-secondary">Abrir último jogo</button>
+        </div>
+      </div>
+      <div class="hero-board" aria-hidden="true">
+        <div class="table-surface">
+          <div class="table-piece king">♔</div>
+          <div class="table-piece checker"></div>
+          <div class="table-piece die">5</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="games" class="games-section">
+      <div class="section-heading">
+        <p class="eyebrow">Catálogo</p>
+        <h2>Jogos disponíveis</h2>
+      </div>
+
+      <div id="games-grid" class="games-grid">
+        <article class="game-card" data-game="xadrez">
+          <div class="game-preview chess-preview" aria-hidden="true"></div>
+          <div class="game-body">
+            <span class="game-kicker">Estratégia clássica</span>
+            <h3>Xadrez</h3>
+            <p>Partidas online, contra amigos ou computador, com histórico por conta.</p>
+            <button class="btn btn-primary btn-full" data-open-game="xadrez">Jogar Xadrez</button>
+          </div>
+        </article>
+
+        <article class="game-card" data-game="dama">
+          <div class="game-preview dama-preview" aria-hidden="true"></div>
+          <div class="game-body">
+            <span class="game-kicker">Captura e avanço</span>
+            <h3>Dama</h3>
+            <p>Jogue dama com login compartilhado, salas e partidas ao vivo.</p>
+            <button class="btn btn-primary btn-full" data-open-game="dama">Jogar Dama</button>
+          </div>
+        </article>
+
+        <article class="game-card" data-game="ludo">
+          <div class="game-preview ludo-preview" aria-hidden="true"></div>
+          <div class="game-body">
+            <span class="game-kicker">Tabuleiro em família</span>
+            <h3>Ludo</h3>
+            <p>Dados, bases coloridas e partidas contra IA ou outros jogadores.</p>
+            <button class="btn btn-primary btn-full" data-open-game="ludo">Jogar Ludo</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="ecosystem" class="ecosystem-section">
+      <div class="section-heading">
+        <p class="eyebrow">Arquitetura</p>
+        <h2>Base para um ecossistema único</h2>
+      </div>
+      <div class="ecosystem-grid">
+        <div><strong>Conta única</strong><span>Firebase Auth compartilhado no domínio `gorio.github.io`.</span></div>
+        <div><strong>Design system</strong><span>CSS central para header, login, botões, cards, lobby e estados.</span></div>
+        <div><strong>Jogos modulares</strong><span>Cada motor pode migrar para `/games/xadrez`, `/games/dama` e `/games/ludo`.</span></div>
+        <div><strong>Histórico unificado</strong><span>Próximo passo: normalizar partidas, rankings e salas em um contrato comum.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
