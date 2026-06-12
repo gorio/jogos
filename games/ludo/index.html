@@ -6,7 +6,7 @@
   <title>Ludo Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎲</text></svg>">
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1235" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1245" />
   <style>
     .ludo-board {
       border: 4px solid #050505;
@@ -138,6 +138,15 @@
 
       <div class="lobby-body">
         <div class="lobby-container">
+          <div class="lobby-preview" aria-hidden="true">
+            <div class="legacy-preview-board ludo-preview-board">
+              <span class="ludo-base-preview red"></span>
+              <span class="ludo-base-preview blue"></span>
+              <span class="ludo-base-preview green"></span>
+              <span class="ludo-base-preview yellow"></span>
+              <span class="ludo-center-preview"></span>
+            </div>
+          </div>
           <div class="logo">
             <span class="logo-icon">🎲</span>
             <h1>Nova Partida</h1>
