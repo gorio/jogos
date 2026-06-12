@@ -6,8 +6,155 @@
   <title>Ludo Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎲</text></svg>">
   <link rel="stylesheet" href="style.css?v=20260612-1425" />
-  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1435" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1605" />
   <style>
+    .lobby-container:has(.lobby-preview) > .intro,
+    .lobby-container:has(.lobby-preview) > .status-card,
+    .lobby-container:has(.lobby-preview) > .rules-card {
+      grid-column: 2 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+    .status-card,
+    .rules-card,
+    .intro {
+      background: rgba(23,26,38,0.92) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      padding: 14px !important;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16) !important;
+    }
+    .status-card { order: 1 !important; display: grid !important; gap: 10px !important; }
+    .rules-card { order: 3 !important; }
+    .intro { order: 4 !important; display: grid !important; gap: 6px !important; background: rgba(23,26,38,0.72) !important; }
+    .status-label,
+    .eyebrow {
+      color: var(--text-muted) !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+    }
+    .eyebrow { color: var(--accent) !important; margin: 0 !important; }
+    .status-value {
+      min-height: 34px !important;
+      color: var(--text) !important;
+      font-size: 19px !important;
+      font-weight: 850 !important;
+      line-height: 1.2 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .rules-card h2,
+    .intro h1 {
+      margin: 0 0 8px !important;
+      color: var(--text) !important;
+      font-size: 18px !important;
+      line-height: 1.15 !important;
+    }
+    .intro p,
+    .rules-card ol {
+      color: #c3c8d4 !important;
+      line-height: 1.5 !important;
+      font-size: 15px !important;
+    }
+    .rules-card ol {
+      margin: 0 !important;
+      padding-left: 20px !important;
+    }
+    .room-code {
+      min-height: 38px !important;
+      border-radius: var(--radius) !important;
+      border: 1px dashed rgba(233,180,76,0.48) !important;
+      background: rgba(233,180,76,0.1) !important;
+      color: var(--accent) !important;
+      display: none !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 900 !important;
+      letter-spacing: 0.1em !important;
+    }
+    .room-code.active { display: flex !important; }
+    .panel-note {
+      min-height: 18px;
+      color: #c3c8d4 !important;
+      font-size: 13px !important;
+      line-height: 1.4 !important;
+      text-align: left !important;
+      margin: 0 !important;
+    }
+    .status-card .mode-selector {
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      overflow: hidden !important;
+    }
+    .status-card .mode-btn {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      align-content: start !important;
+      justify-items: start !important;
+      text-align: left !important;
+      outline: 0 !important;
+      grid-template-rows: auto auto !important;
+    }
+    .status-card .mode-btn:focus-visible {
+      box-shadow: 0 0 0 2px rgba(233,180,76,0.42) !important;
+    }
+    .status-card .mode-label {
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .status-card .mode-btn .mode-desc {
+      color: inherit !important;
+      opacity: 0.72 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      overflow-wrap: normal !important;
+    }
+    .status-card .mode-btn.active .mode-desc {
+      color: #15110a !important;
+      opacity: 0.82 !important;
+    }
+    .status-card .mode-panel {
+      border-radius: var(--radius) !important;
+      border: 1px solid var(--line) !important;
+      background: rgba(255,255,255,0.035) !important;
+      padding: 14px !important;
+      gap: 10px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .status-card .ai-options,
+    .status-card .option-group,
+    .status-card .segmented {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .status-card .segmented {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    .status-card .seg-btn {
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+    .status-card .option-label {
+      color: #c3c8d4 !important;
+    }
     .ludo-board {
       border: 4px solid #050505;
       box-shadow: var(--shadow), 0 0 0 2px rgba(255,255,255,0.08);
@@ -142,62 +289,72 @@
           <div class="lobby-preview" aria-hidden="true">
             <div class="ludo-board lobby-real-board" data-lobby-board="ludo"></div>
           </div>
-          <div class="logo">
-            <span class="logo-icon">🎲</span>
-            <h1>Nova Partida</h1>
+          <div class="intro">
+            <p class="eyebrow">Corrida de dados</p>
+            <h1>Ludo</h1>
+            <p>Tire suas peças da base, avance pelo tabuleiro e leve todas até o centro antes dos adversários.</p>
           </div>
 
-          <div class="mode-selector">
-            <button class="mode-btn active" data-mode="multiplayer">
-              <span class="mode-icon">👥</span>
-              <span class="mode-label">Jogador online</span>
-              <span class="mode-desc">Crie ou entre em uma sala</span>
-            </button>
-            <button class="mode-btn" data-mode="ai">
-              <span class="mode-icon">🤖</span>
-              <span class="mode-label">vs Computador</span>
-              <span class="mode-desc">Jogue contra a IA</span>
-            </button>
-          </div>
+          <div class="status-card">
+            <span class="status-label">Estado da partida</span>
+            <div id="lobby-status" class="status-value">Crie ou entre em uma sala</div>
+            <div class="mode-selector">
+              <button class="mode-btn active" data-mode="multiplayer">
+                <span class="mode-label">Jogador online</span>
+                <span class="mode-desc">Crie ou entre em uma sala</span>
+              </button>
+              <button class="mode-btn" data-mode="ai">
+                <span class="mode-label">vs Computador</span>
+                <span class="mode-desc">Jogue contra a IA</span>
+              </button>
+            </div>
 
-          <div id="panel-multiplayer" class="mode-panel">
-            <div class="option-group">
-              <span class="option-label">Jogadores humanos</span>
-              <div id="lobby-player-count" class="segmented">
-                <button class="seg-btn active" data-count="2">2</button>
-                <button class="seg-btn" data-count="3">3</button>
-                <button class="seg-btn" data-count="4">4</button>
-              </div>
-            </div>
-            <button id="btn-create-room" class="btn btn-primary btn-full">Criar sala online</button>
-            <div class="divider"><span>ou entre em uma sala</span></div>
-            <div class="join-group">
-              <input id="input-room" type="text" placeholder="Código da sala" maxlength="6" />
-              <button id="btn-join-room" class="btn btn-secondary">Entrar</button>
-            </div>
-            <div class="divider"><span>ou assista uma partida</span></div>
-            <div class="join-group">
-              <input id="input-spectate" type="text" placeholder="Código da sala" maxlength="6" />
-              <button id="btn-spectate-room" class="btn btn-ghost">👁 Assistir</button>
-            </div>
-          </div>
-
-          <div id="panel-ai" class="mode-panel hidden">
-            <div class="ai-options">
-              <div class="option-group">
-                <span class="option-label">Quantidade de IAs</span>
-                <div id="lobby-ai-count" class="segmented">
-                  <button class="seg-btn active" data-count="1">1 IA</button>
-                  <button class="seg-btn" data-count="2">2 IAs</button>
-                  <button class="seg-btn" data-count="3">3 IAs</button>
+            <div id="panel-multiplayer" class="mode-panel">
+              <div id="lobby-player-count-group" class="option-group">
+                <span class="option-label">Jogadores humanos</span>
+                <div id="lobby-player-count" class="segmented">
+                  <button class="seg-btn active" data-count="2">2</button>
+                  <button class="seg-btn" data-count="3">3</button>
+                  <button class="seg-btn" data-count="4">4</button>
                 </div>
               </div>
+              <button id="btn-create-room" class="btn btn-primary btn-full">Criar sala online</button>
+              <div id="join-room-row" class="join-group">
+                <input id="input-room" type="text" placeholder="CÓDIGO" maxlength="6" />
+                <button id="btn-join-room" class="btn btn-secondary">Entrar</button>
+              </div>
+              <div id="current-room-code" class="room-code"></div>
+              <button id="btn-invite-room" class="btn btn-secondary btn-full hidden">Convidar jogador</button>
+              <button id="btn-start-room-lobby" class="btn btn-primary btn-full hidden" disabled>Iniciar partida</button>
+              <button id="btn-cancel-room-lobby" class="btn btn-ghost btn-full hidden">Cancelar sala</button>
+              <p id="lobby-error" class="panel-note">Entre pelo portal para jogar online com outro jogador.</p>
             </div>
-            <button id="btn-start-ai-game" class="btn btn-primary btn-full">Iniciar Partida</button>
+
+            <div id="panel-ai" class="mode-panel hidden">
+              <div class="ai-options">
+                <div class="option-group">
+                  <span class="option-label">Quantidade de IAs</span>
+                  <div id="lobby-ai-count" class="segmented">
+                    <button class="seg-btn active" data-count="1">1 IA</button>
+                    <button class="seg-btn" data-count="2">2 IAs</button>
+                    <button class="seg-btn" data-count="3">3 IAs</button>
+                  </div>
+                </div>
+              </div>
+              <button id="btn-start-ai-game" class="btn btn-primary btn-full">Iniciar Partida</button>
+            </div>
           </div>
 
-          <button id="btn-live-games-ludo" class="btn btn-secondary btn-full">Partidas ao Vivo</button>
-          <p id="lobby-error" class="error-msg"></p>
+          <div class="rules-card">
+            <h2>Como jogar Ludo</h2>
+            <ol>
+              <li>Role o dado no seu turno. Para sair da base, normalmente é preciso tirar 6.</li>
+              <li>Avance suas peças pelo caminho da sua cor até a reta final.</li>
+              <li>Se cair em uma casa ocupada por adversário, capture essa peça e ela volta para a base.</li>
+              <li>Casas marcadas como seguras protegem as peças contra captura.</li>
+              <li>Vence quem levar todas as suas peças até o centro primeiro.</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
@@ -296,6 +453,7 @@
   <script src="ludoai.js?v=20260612-1320"></script>
   <script src="../shared/legacy-lobby.js?v=20260612-1320"></script>
   <script src="app.js?v=20260612-1355"></script>
+  <script src="lobby-panel.js?v=20260612-1738"></script>
   <script>
     function getHomeYardColor(row, col) {
       if (row >= 1 && row <= 4 && col >= 1 && col <= 4) return 'red';
