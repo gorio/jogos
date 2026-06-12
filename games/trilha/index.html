@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../shared/board-game.css" />
   <style>
     :root {
-      --board-size: clamp(460px, 45vw, 620px);
+      --board-size: min(560px, 43vw, calc(100vh - 210px));
     }
     .trilha-board {
       width: var(--board-size);
@@ -51,7 +51,7 @@
     .piece.black { background: linear-gradient(#444, #050505); border: 2px solid #000; }
     .remove-mode .node.enemy .piece { box-shadow: 0 0 0 5px rgba(238,93,90,0.55), 0 4px 9px rgba(0,0,0,0.42); }
     @media (max-width: 900px) {
-      :root { --board-size: min(92vw, 560px); }
+      :root { --board-size: min(92vw, 540px); }
     }
   </style>
 </head>

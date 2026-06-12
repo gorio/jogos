@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../shared/board-game.css" />
   <style>
     :root {
-      --board-size: clamp(420px, 43vw, 600px);
+      --board-size: min(500px, 40vw, calc(100vh - 210px));
     }
     .ttt-board {
       width: var(--board-size);
@@ -27,7 +27,7 @@
       border-radius: 8px;
       background: #f2dfb5;
       color: #15110a;
-      font-size: clamp(54px, 16vw, 112px);
+      font-size: clamp(48px, 8vw, 88px);
       font-weight: 900;
       line-height: 1;
       display: grid;
@@ -61,7 +61,7 @@
       color: #15110a;
     }
     @media (max-width: 900px) {
-      :root { --board-size: min(92vw, 540px); }
+      :root { --board-size: min(92vw, 500px); }
     }
   </style>
 </head>
