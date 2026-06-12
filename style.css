@@ -389,6 +389,104 @@ button, input { font: inherit; }
 .game-preview {
   height: 220px;
   border-bottom: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8,9,16,0.34);
+}
+.portal-board {
+  width: min(100%, 188px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 5px solid #101010;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 18px 34px rgba(0,0,0,0.28);
+}
+.portal-chess,
+.portal-dama {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+.portal-square {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+}
+.portal-square.light { background: #f1d9a8; }
+.portal-square.dark { background: #8b5a2b; }
+.portal-piece {
+  line-height: 1;
+  font-size: clamp(18px, 2.4vw, 30px);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+.portal-piece.white {
+  color: #fff;
+  text-shadow: 0 1px 0 #111, 1px 0 0 #111, -1px 0 0 #111, 0 -1px 0 #111;
+}
+.portal-piece.black {
+  color: #121212;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.22);
+}
+.portal-man {
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.42), inset 0 2px 4px rgba(255,255,255,0.35);
+}
+.portal-man.white {
+  background: radial-gradient(circle at 35% 28%, #fff, #d9d9d9 58%, #a2a2a2);
+  border: 2px solid rgba(255,255,255,0.42);
+}
+.portal-man.black {
+  background: radial-gradient(circle at 35% 28%, #555, #151515 58%, #050505);
+  border: 2px solid rgba(0,0,0,0.6);
+}
+.portal-ludo {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  background: #202638;
+}
+.portal-ludo-cell {
+  border: 1px solid rgba(0,0,0,0.58);
+  position: relative;
+}
+.portal-ludo-cell.neutral-path { background: #f0d9b5; }
+.portal-ludo-cell.red-base { background: #9f2d25; }
+.portal-ludo-cell.blue-base { background: #1f5d8f; }
+.portal-ludo-cell.green-base { background: #1e864a; }
+.portal-ludo-cell.yellow-base { background: #b88708; }
+.portal-ludo-cell.red-homepath,
+.portal-ludo-cell.red-entry { background: #e74c3c; }
+.portal-ludo-cell.blue-homepath,
+.portal-ludo-cell.blue-entry { background: #3498db; }
+.portal-ludo-cell.green-homepath,
+.portal-ludo-cell.green-entry { background: #2ecc71; }
+.portal-ludo-cell.yellow-homepath,
+.portal-ludo-cell.yellow-entry { background: #f1c40f; }
+.portal-ludo-cell.home-yard { background: #f7efd9; }
+.portal-ludo-cell.base-pocket::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.56);
+  border: 1.5px solid rgba(0,0,0,0.5);
+}
+.portal-ludo-cell.center-final {
+  background: conic-gradient(from 45deg, #3498db 0 25%, #2ecc71 0 50%, #f1c40f 0 75%, #e74c3c 0 100%);
+}
+.portal-ludo-cell.safe::after {
+  content: "★";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #e9b44c;
+  font-size: 11px;
 }
 .game-body {
   padding: 20px;
@@ -420,32 +518,10 @@ button, input { font: inherit; }
   color: var(--muted);
   line-height: 1.6;
 }
-.ecosystem-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.ecosystem-grid > div {
-  background: var(--surface);
-  padding: 22px;
-  display: grid;
-  gap: 10px;
-}
-.ecosystem-grid strong { font-size: 18px; }
-.ecosystem-grid span {
-  color: var(--muted);
-  line-height: 1.6;
-}
-
 @media (max-width: 980px) {
   .auth-screen.active,
   .hero,
-  .games-grid,
-  .ecosystem-grid {
+  .games-grid {
     grid-template-columns: 1fr;
   }
   .auth-panel { border-left: 0; border-top: 1px solid var(--line); }
