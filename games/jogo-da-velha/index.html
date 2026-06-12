@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo da Velha Online</title>
-  <link rel="stylesheet" href="../shared/board-game.css" />
+  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1118" />
   <style>
     :root {
-      --board-size: min(500px, 40vw, calc(100vh - 210px));
+      --board-size: min(540px, 43vw, calc(100vh - 190px));
     }
     .ttt-board {
       width: var(--board-size);
@@ -15,8 +15,8 @@
       aspect-ratio: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 12px;
+      gap: 8px;
+      padding: 10px;
       border-radius: 8px;
       background: #11131d;
       border: 1px solid var(--line);
@@ -27,7 +27,7 @@
       border-radius: 8px;
       background: #f2dfb5;
       color: #15110a;
-      font-size: clamp(48px, 8vw, 88px);
+      font-size: clamp(40px, 5.8vw, 72px);
       font-weight: 900;
       line-height: 1;
       display: grid;
@@ -61,7 +61,7 @@
       color: #15110a;
     }
     @media (max-width: 900px) {
-      :root { --board-size: min(92vw, 500px); }
+      :root { --board-size: min(92vw, 540px); }
       .mode-switch { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -77,6 +77,10 @@
     </header>
 
     <section class="game-page">
+      <section class="board-stage">
+        <div id="board" class="ttt-board" aria-label="Tabuleiro de Jogo da Velha"></div>
+      </section>
+
       <aside class="side-panel">
         <div class="intro">
           <p class="eyebrow">Rápido e competitivo</p>
@@ -110,10 +114,6 @@
           </ul>
         </div>
       </aside>
-
-      <section class="board-stage">
-        <div id="board" class="ttt-board" aria-label="Tabuleiro de Jogo da Velha"></div>
-      </section>
     </section>
   </main>
   <script src="app.js"></script>

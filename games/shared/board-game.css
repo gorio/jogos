@@ -95,8 +95,6 @@ a { color: inherit; text-decoration: none; }
 .side-panel {
   display: grid;
   gap: 12px;
-  grid-column: 2;
-  grid-row: 1;
   align-self: start;
 }
 
@@ -204,8 +202,6 @@ h1 {
   place-items: center;
   width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
   min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
-  grid-column: 1;
-  grid-row: 1;
   justify-self: end;
   align-self: start;
   contain: layout paint;
@@ -267,13 +263,9 @@ h1 {
   .game-page { grid-template-columns: minmax(0, 1fr); }
   .side-panel {
     order: 2;
-    grid-column: auto;
-    grid-row: auto;
   }
   .board-stage {
     order: 1;
-    grid-column: auto;
-    grid-row: auto;
     justify-self: center;
     width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
     min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
