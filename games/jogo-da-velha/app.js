@@ -153,8 +153,36 @@ function setRoomNote(message) {
 
 function showRoomCode(code) {
   const node = qs("#current-room-code");
+  const createButton = qs("#btn-create-room");
+  const joinRow = qs("#join-room-row");
+  const inviteButton = qs("#btn-invite-room");
   node.textContent = code ? "Sala " + code : "";
   node.classList.toggle("active", Boolean(code));
+  createButton.classList.toggle("hidden", Boolean(code));
+  joinRow.classList.toggle("hidden", Boolean(code));
+  inviteButton.classList.toggle("hidden", !code);
+}
+
+async function inviteRoom() {
+  if (!onlineRoomCode) {
+    setRoomNote("Crie uma sala primeiro.");
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  url.searchParams.set("room", onlineRoomCode);
+  const text = "Te desafio para uma partida de Jogo da Velha. Código: " + onlineRoomCode + " - " + url.toString();
+
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "Desafio de Jogo da Velha", text, url: url.toString() });
+      return;
+    }
+    await navigator.clipboard.writeText(text);
+    setRoomNote("Convite copiado. Envie para o outro jogador.");
+  } catch (error) {
+    setRoomNote("Código da sala: " + onlineRoomCode);
+  }
 }
 
 function ensureFirebase() {
@@ -363,6 +391,7 @@ qs("#mode-online").addEventListener("click", () => setMode("online"));
 qs("#mode-ai").addEventListener("click", () => setMode("ai"));
 qs("#btn-create-room").addEventListener("click", createRoom);
 qs("#btn-join-room").addEventListener("click", joinRoom);
+qs("#btn-invite-room").addEventListener("click", inviteRoom);
 qs("#btn-start-ai").addEventListener("click", () => setMode("ai"));
 qs("#room-code-input").addEventListener("input", event => {
   event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -370,3 +399,5 @@ qs("#room-code-input").addEventListener("input", event => {
 
 ensureFirebase();
 setMode("online");
+const requestedRoom = new URLSearchParams(window.location.search).get("room");
+if (requestedRoom) qs("#room-code-input").value = requestedRoom.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
