@@ -84,9 +84,9 @@
           <span class="status-label">Estado da partida</span>
           <div id="status" class="status-value">Carregando...</div>
           <div class="mode-selector" aria-label="Modo de jogo">
-            <button id="mode-online" class="mode-btn" data-mode="online" disabled>
+            <button id="mode-online" class="mode-btn" data-mode="online">
               <span class="mode-label">Jogador online</span>
-              <span class="mode-desc">Salas online em implantação</span>
+              <span class="mode-desc">Crie ou entre em uma sala</span>
             </button>
             <button id="mode-ai" class="mode-btn active" data-mode="ai">
               <span class="mode-label">vs Computador</span>
@@ -94,7 +94,13 @@
             </button>
           </div>
           <div id="panel-online" class="mode-panel">
-            <p class="panel-note">A sala online da Trilha seguirá o mesmo padrão de Xadrez, Dama e Ludo. Enquanto isso, use o modo contra IA.</p>
+            <button id="btn-create-room" class="btn btn-primary">Criar sala online</button>
+            <div class="room-row">
+              <input id="room-code-input" class="room-input" maxlength="6" placeholder="Código" />
+              <button id="btn-join-room" class="btn">Entrar</button>
+            </div>
+            <div id="current-room-code" class="room-code"></div>
+            <p id="room-note" class="panel-note">Entre pelo portal para jogar online com outro jogador.</p>
           </div>
           <div id="panel-ai" class="mode-panel active">
             <button id="btn-start-ai" class="btn btn-primary">Iniciar contra IA</button>
@@ -119,6 +125,9 @@
       </aside>
     </section>
   </main>
-  <script src="app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="app.js?v=20260612-1515"></script>
 </body>
 </html>
