@@ -1,0 +1,181 @@
+name: Importar jogos para monorepo
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/import-games.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import-games:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout jogos
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Importar repositórios legados
+        run: |
+          set -euo pipefail
+
+          rm -rf games
+          mkdir -p games
+
+          git clone --depth 1 https://github.com/gorio/xadrez.git /tmp/xadrez
+          git clone --depth 1 https://github.com/gorio/dama.git /tmp/dama
+          git clone --depth 1 https://github.com/gorio/ludo.git /tmp/ludo
+
+          mkdir -p games/xadrez games/dama games/ludo
+          cp -R /tmp/xadrez/. games/xadrez/
+          cp -R /tmp/dama/. games/dama/
+          cp -R /tmp/ludo/. games/ludo/
+
+          rm -rf games/xadrez/.git games/dama/.git games/ludo/.git
+
+          # Mantém o portal como entrada oficial e deixa um retorno visível nos jogos.
+          for game in xadrez dama ludo; do
+            if [ -f "games/${game}/index.html" ]; then
+              sed -i 's#</body>#  <a class="portal-back-link" href="../../">← Portal de Jogos</a>\n</body>#' "games/${game}/index.html"
+              if [ -f "games/${game}/style.css" ]; then
+                css_file="games/${game}/style.css"
+              elif [ -f "games/${game}/css/style.css" ]; then
+                css_file="games/${game}/css/style.css"
+              else
+                css_file=""
+              fi
+              if [ -n "$css_file" ] && ! grep -q "portal-back-link" "$css_file"; then
+                cat >> "$css_file" <<'CSS'
+
+.portal-back-link {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 5000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 8px;
+  background: rgba(8,9,16,0.84);
+  color: #f7f4ea;
+  text-decoration: none;
+  font: 600 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.32);
+  backdrop-filter: blur(10px);
+}
+
+.portal-back-link:hover {
+  border-color: rgba(233,180,76,0.72);
+}
+CSS
+              fi
+            fi
+          done
+
+      - name: Registrar estrutura importada
+        run: |
+          perl -0pi -e 's#\.\./xadrez/#games/xadrez/#g; s#\.\./dama/#games/dama/#g; s#\.\./ludo/#games/ludo/#g' app.js
+
+          cat > README.md <<'MD'
+          # Jogos de Tabuleiro Online
+
+          Portal único para jogos de tabuleiro online.
+
+          ## Estrutura
+
+          - `/`: portal, login único e catálogo.
+          - `/games/xadrez`: código do Xadrez.
+          - `/games/dama`: código da Dama.
+          - `/games/ludo`: código do Ludo.
+          - `/core`: base futura para autenticação, UI compartilhada, histórico, ranking e recursos comuns.
+
+          A partir desta migração, este repositório é a fonte principal do ecossistema. Os repositórios individuais devem ser considerados legados.
+          MD
+
+          mkdir -p core
+          cat > core/README.md <<'MD'
+          # Core
+
+          Esta pasta será usada para componentes compartilhados entre os jogos:
+
+          - Firebase/Auth
+          - design system
+          - histórico unificado
+          - ranking
+          - salas e partidas ao vivo
+          - utilitários comuns de UX
+          MD
+
+          cat > MIGRATION.md <<'MD'
+          # Jogos de Tabuleiro Online
+
+          Este repositório é a fonte principal do ecossistema de jogos de tabuleiro online.
+
+          ## Estado atual
+
+          - `gorio/jogos`: portal central com login único, identidade do usuário e catálogo.
+          - `games/xadrez`: código importado do antigo `gorio/xadrez`.
+          - `games/dama`: código importado do antigo `gorio/dama`.
+          - `games/ludo`: código importado do antigo `gorio/ludo`.
+
+          Os repositórios individuais passam a ser fontes legadas. A evolução do produto deve acontecer neste repositório.
+
+          ## Arquitetura do monorepo
+
+          ```text
+          /jogos
+            /core
+              auth.js
+              firebase.js
+              history.js
+              live-games.js
+              ui.css
+            /games
+              /xadrez
+              /dama
+              /ludo
+            index.html
+          ```
+
+          ## Próximas etapas
+
+          1. Extrair `auth.js`, `history.js` e estilos comuns para `/core`.
+          2. Remover telas de login duplicadas dos jogos e usar apenas o login do portal.
+          3. Padronizar contrato de salas:
+             - `gameType`
+             - `roomCode`
+             - `players`
+             - `state`
+             - `status`
+             - `createdAt`
+             - `updatedAt`
+          4. Criar histórico unificado por usuário com filtros por jogo.
+          5. Criar ranking, partidas ao vivo e perfil público.
+          6. Transformar o portal em PWA instalável.
+
+          ## Segurança e manutenção
+
+          - Firebase Auth permanece como provedor único.
+          - Regras do Realtime Database devem separar leitura pública de partidas ao vivo e escrita autenticada.
+          - Cada jogo precisa validar estado antes de salvar ou reproduzir partidas.
+          - O frontend não deve confiar em dados de sala sem normalização local.
+          MD
+
+      - name: Commitar migração
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "Nada para commitar"
+            exit 0
+          fi
+          git commit -m "Migra jogos para monorepo"
+          git push
