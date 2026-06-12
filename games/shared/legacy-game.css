@@ -25,6 +25,21 @@ body {
   background: transparent !important;
 }
 
+#screen-lobby.screen.active,
+#screen-game.screen.active {
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  flex-direction: column !important;
+}
+
+.app-shell,
+#screen-lobby > div[style] {
+  width: 100% !important;
+  min-height: 100vh !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr !important;
+}
+
 .auth-container,
 .lobby-container,
 .waiting-container {
@@ -110,14 +125,32 @@ body {
   border-bottom: 1px solid var(--line) !important;
   background: rgba(8,9,16,0.78) !important;
   backdrop-filter: blur(16px);
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
 }
 
 .header-logo {
   font-size: 18px !important;
+  font-weight: 850 !important;
 }
 
 .header-user {
+  margin-left: auto !important;
   gap: 10px !important;
+}
+
+.back-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 34px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  color: var(--text-muted) !important;
+  font-weight: 750 !important;
+  text-decoration: none !important;
 }
 
 .btn {
@@ -250,6 +283,7 @@ select {
   justify-items: center !important;
   gap: 12px !important;
   align-self: start !important;
+  justify-self: end !important;
 }
 
 .game-sidebar {
