@@ -12,6 +12,72 @@ function clearLobbyError() {
   showLobbyError('');
 }
 
+function injectDamaLobbyPanelFixes() {
+  if (document.getElementById('dama-lobby-panel-fixes')) return;
+  const style = document.createElement('style');
+  style.id = 'dama-lobby-panel-fixes';
+  style.textContent = `
+    .status-card .mode-selector {
+      width: 100% !important;
+      max-width: 100% !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      overflow: hidden !important;
+    }
+    .status-card .mode-btn {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      align-content: start !important;
+      justify-items: start !important;
+      text-align: left !important;
+      outline: 0 !important;
+      grid-template-rows: auto auto !important;
+    }
+    .status-card .mode-btn:focus-visible {
+      box-shadow: 0 0 0 2px rgba(233,180,76,0.42) !important;
+    }
+    .status-card .mode-label {
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .status-card .mode-btn .mode-desc {
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      overflow-wrap: normal !important;
+    }
+    .status-card .mode-panel,
+    .status-card .ai-options,
+    .status-card .option-group,
+    .status-card .color-selector,
+    .status-card .difficulty-selector {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .status-card .mode-panel,
+    .status-card .ai-options {
+      overflow: hidden !important;
+    }
+    .status-card .difficulty-selector {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+    .status-card .color-btn,
+    .status-card .diff-btn {
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function showRoomInvite(code) {
   const createBtn = document.getElementById('btn-create');
   const joinRow = document.getElementById('join-room-row');
@@ -51,6 +117,7 @@ async function inviteRoom() {
 }
 
 initLobbyUI = function() {
+  injectDamaLobbyPanelFixes();
   el('btn-logout', 'click', () => fbAuth.signOut());
   el('btn-history', 'click', openHistory);
   el('btn-create', 'click', createGame);
