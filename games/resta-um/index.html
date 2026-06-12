@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resta Um Online</title>
-  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1018" />
+  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1210" />
   <style>
     :root {
       --board-size: min(520px, 41vw, calc(100vh - 210px));
@@ -79,6 +79,16 @@
         <div class="status-card">
           <span class="status-label">Progresso</span>
           <div id="status" class="status-value">Escolha uma peça</div>
+          <div class="mode-selector" aria-label="Modo de jogo">
+            <button class="mode-btn active" type="button">
+              <span class="mode-label">Desafio solo</span>
+              <span class="mode-desc">Resolva no menor número de jogadas</span>
+            </button>
+            <button class="mode-btn" type="button" disabled>
+              <span class="mode-label">Online</span>
+              <span class="mode-desc">Ranking será integrado ao portal</span>
+            </button>
+          </div>
           <div class="metric-grid">
             <div class="metric"><strong id="peg-count">32</strong><span>Peças</span></div>
             <div class="metric"><strong id="move-count">0</strong><span>Jogadas</span></div>

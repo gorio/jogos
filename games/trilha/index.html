@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trilha Online</title>
-  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1018" />
+  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1210" />
   <style>
     :root {
       --board-size: min(560px, 43vw, calc(100vh - 210px));
@@ -80,6 +80,23 @@
         <div class="status-card">
           <span class="status-label">Estado da partida</span>
           <div id="status" class="status-value">Carregando...</div>
+          <div class="mode-selector" aria-label="Modo de jogo">
+            <button id="mode-online" class="mode-btn" data-mode="online" disabled>
+              <span class="mode-label">Jogador online</span>
+              <span class="mode-desc">Salas online em implantação</span>
+            </button>
+            <button id="mode-ai" class="mode-btn active" data-mode="ai">
+              <span class="mode-label">vs Computador</span>
+              <span class="mode-desc">Jogue contra a IA</span>
+            </button>
+          </div>
+          <div id="panel-online" class="mode-panel">
+            <p class="panel-note">A sala online da Trilha seguirá o mesmo padrão de Xadrez, Dama e Ludo. Enquanto isso, use o modo contra IA.</p>
+          </div>
+          <div id="panel-ai" class="mode-panel active">
+            <button id="btn-start-ai" class="btn btn-primary">Iniciar contra IA</button>
+            <p class="panel-note">Você joga com as brancas. A IA joga com as pretas.</p>
+          </div>
           <div class="metric-grid">
             <div class="metric"><strong id="white-left">9</strong><span>Brancas para colocar</span></div>
             <div class="metric"><strong id="black-left">9</strong><span>Pretas para colocar</span></div>

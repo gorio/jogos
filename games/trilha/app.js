@@ -22,6 +22,9 @@ let selected;
 let toPlace;
 let removeMode;
 let winner;
+let mode = "ai";
+let aiColor = "black";
+let aiThinking = false;
 
 function resetGame() {
   board = Array(24).fill(null);
@@ -30,7 +33,9 @@ function resetGame() {
   toPlace = { white: 9, black: 9 };
   removeMode = false;
   winner = null;
+  aiThinking = false;
   render();
+  maybeAiTurn();
 }
 
 function other(color) {
@@ -84,6 +89,7 @@ function finishTurn(createdMill) {
   if (!winner) turn = other(turn);
   selected = null;
   render();
+  maybeAiTurn();
 }
 
 function canMove(from, to) {
@@ -93,7 +99,9 @@ function canMove(from, to) {
 }
 
 function handleNode(index) {
-  if (winner) return;
+  if (winner || aiThinking) return;
+  if (mode === "online") return;
+  if (mode === "ai" && turn === aiColor) return;
 
   if (removeMode) {
     const enemy = other(turn);
@@ -103,6 +111,7 @@ function handleNode(index) {
       updateWinner();
       if (!winner) turn = enemy;
       render();
+      maybeAiTurn();
     }
     return;
   }
@@ -136,6 +145,86 @@ function handleNode(index) {
 
   selected = null;
   render();
+}
+
+function emptyPositions() {
+  return board.map((piece, index) => piece ? -1 : index).filter(index => index >= 0);
+}
+
+function aiPlacementMove(color) {
+  return emptyPositions()[0];
+}
+
+function aiMovementMove(color) {
+  const pieces = board.map((piece, index) => piece === color ? index : -1).filter(index => index >= 0);
+  const canFly = pieces.length <= 3;
+  for (const from of pieces) {
+    const targets = canFly ? emptyPositions() : ADJ[from].filter(dest => !board[dest]);
+    if (targets.length) return { from, to: targets[0] };
+  }
+  return null;
+}
+
+function aiRemoveMove(color) {
+  return removablePieces(other(color))[0];
+}
+
+function applyAiMove() {
+  if (winner || mode !== "ai" || turn !== aiColor) return;
+
+  if (removeMode) {
+    const target = aiRemoveMove(aiColor);
+    if (target !== undefined) {
+      board[target] = null;
+      removeMode = false;
+      updateWinner();
+      if (!winner) turn = other(aiColor);
+      render();
+    }
+    aiThinking = false;
+    return;
+  }
+
+  if (isPlacementPhase()) {
+    const target = aiPlacementMove(aiColor);
+    if (target !== undefined) {
+      board[target] = aiColor;
+      toPlace[aiColor] -= 1;
+      aiThinking = false;
+      finishTurn(formsMill(target, aiColor));
+      return;
+    }
+  } else {
+    const move = aiMovementMove(aiColor);
+    if (move) {
+      board[move.to] = aiColor;
+      board[move.from] = null;
+      aiThinking = false;
+      finishTurn(formsMill(move.to, aiColor));
+      return;
+    }
+  }
+
+  aiThinking = false;
+  updateWinner();
+  render();
+}
+
+function maybeAiTurn() {
+  if (mode !== "ai" || winner || turn !== aiColor || aiThinking) return;
+  aiThinking = true;
+  render();
+  setTimeout(applyAiMove, 420);
+}
+
+function setMode(nextMode) {
+  mode = nextMode;
+  document.querySelectorAll(".mode-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.mode === mode);
+  });
+  document.getElementById("panel-online").classList.toggle("active", mode === "online");
+  document.getElementById("panel-ai").classList.toggle("active", mode === "ai");
+  resetGame();
 }
 
 function drawLines(container) {
@@ -192,10 +281,15 @@ function render() {
 
   const status = document.getElementById("status");
   if (winner) status.textContent = colorName(winner) + " venceram";
+  else if (mode === "online") status.textContent = "Escolha o modo vs Computador para jogar agora";
+  else if (aiThinking) status.textContent = "Computador pensando";
   else if (removeMode) status.textContent = colorName(turn) + ": remova uma peça";
   else if (isPlacementPhase()) status.textContent = colorName(turn) + ": coloque uma peça";
   else status.textContent = selected === null ? colorName(turn) + ": escolha uma peça" : colorName(turn) + ": escolha o destino";
 }
 
 document.getElementById("btn-reset").addEventListener("click", resetGame);
+document.getElementById("mode-online").addEventListener("click", () => setMode("online"));
+document.getElementById("mode-ai").addEventListener("click", () => setMode("ai"));
+document.getElementById("btn-start-ai").addEventListener("click", () => setMode("ai"));
 resetGame();
