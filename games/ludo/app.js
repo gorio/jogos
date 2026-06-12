@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', function() {
       stopRoomListeners();
       gameActive = false;
       isSpectator = false;
-      showScreen('auth');
+      window.location.href = '../../';
     }
   });
 });
