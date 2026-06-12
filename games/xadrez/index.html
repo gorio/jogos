@@ -6,7 +6,163 @@
   <title>Xadrez Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>♟</text></svg>">
   <link rel="stylesheet" href="css/style.css?v=20260612-1320" />
-  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1435" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1605" />
+  <style>
+    .lobby-container:has(.lobby-preview) > .intro,
+    .lobby-container:has(.lobby-preview) > .status-card,
+    .lobby-container:has(.lobby-preview) > .rules-card {
+      grid-column: 2 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+    .status-card,
+    .rules-card,
+    .intro {
+      background: rgba(23,26,38,0.92) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      padding: 14px !important;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16) !important;
+    }
+    .status-card { order: 1 !important; display: grid !important; gap: 10px !important; }
+    .rules-card { order: 3 !important; }
+    .intro { order: 4 !important; display: grid !important; gap: 6px !important; background: rgba(23,26,38,0.72) !important; }
+    .status-label,
+    .eyebrow {
+      color: var(--text-muted) !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+    }
+    .eyebrow { color: var(--accent) !important; margin: 0 !important; }
+    .status-value {
+      min-height: 34px !important;
+      color: var(--text) !important;
+      font-size: 19px !important;
+      font-weight: 850 !important;
+      line-height: 1.2 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .rules-card h2,
+    .intro h1 {
+      margin: 0 0 8px !important;
+      color: var(--text) !important;
+      font-size: 18px !important;
+      line-height: 1.15 !important;
+    }
+    .intro p,
+    .rules-card ol {
+      color: #c3c8d4 !important;
+      line-height: 1.5 !important;
+      font-size: 15px !important;
+    }
+    .rules-card ol {
+      margin: 0 !important;
+      padding-left: 20px !important;
+    }
+    .room-code {
+      min-height: 38px !important;
+      border-radius: var(--radius) !important;
+      border: 1px dashed rgba(233,180,76,0.48) !important;
+      background: rgba(233,180,76,0.1) !important;
+      color: var(--accent) !important;
+      display: none !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 900 !important;
+      letter-spacing: 0.1em !important;
+    }
+    .room-code.active { display: flex !important; }
+    .panel-note {
+      min-height: 18px;
+      color: #c3c8d4 !important;
+      font-size: 13px !important;
+      line-height: 1.4 !important;
+      text-align: left !important;
+      margin: 0 !important;
+    }
+    .status-card .mode-selector {
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      overflow: hidden !important;
+    }
+    .status-card .mode-btn {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      align-content: start !important;
+      justify-items: start !important;
+      text-align: left !important;
+      outline: 0 !important;
+      grid-template-rows: auto auto !important;
+    }
+    .status-card .mode-btn:focus-visible {
+      box-shadow: 0 0 0 2px rgba(233,180,76,0.42) !important;
+    }
+    .status-card .mode-label {
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .status-card .mode-btn .mode-desc {
+      color: inherit !important;
+      opacity: 0.72 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      text-align: left !important;
+      overflow-wrap: normal !important;
+    }
+    .status-card .mode-btn.active .mode-desc {
+      color: #15110a !important;
+      opacity: 0.82 !important;
+    }
+    .status-card .mode-panel {
+      border-radius: var(--radius) !important;
+      border: 1px solid var(--line) !important;
+      background: rgba(255,255,255,0.035) !important;
+      padding: 14px !important;
+      gap: 10px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+    .status-card .ai-options,
+    .status-card .option-group,
+    .status-card .color-selector,
+    .status-card .difficulty-selector {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .status-card .difficulty-selector {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+    .status-card .color-btn,
+    .status-card .diff-btn {
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+    .status-card .option-label,
+    .status-card .diff-desc {
+      color: #c3c8d4 !important;
+    }
+    .status-card .diff-btn.active .diff-desc {
+      color: #15110a !important;
+      opacity: 0.82 !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -107,81 +263,87 @@
               <div class="coords-file"></div>
             </div>
           </div>
-          <div class="logo">
-            <span class="logo-icon">♟</span>
-            <h1>Nova Partida</h1>
+          <div class="intro">
+            <p class="eyebrow">Estratégia completa</p>
+            <h1>Xadrez</h1>
+            <p>Proteja seu rei, coordene suas peças e procure o xeque-mate no rei adversário.</p>
           </div>
 
-          <!-- Seletor de modo -->
-          <div class="mode-selector">
-            <button class="mode-btn active" data-mode="multiplayer">
-              <span class="mode-icon">👥</span>
-              <span class="mode-label">Jogador online</span>
-              <span class="mode-desc">Crie ou entre em uma sala</span>
-            </button>
-            <button class="mode-btn" data-mode="ai">
-              <span class="mode-icon">🤖</span>
-              <span class="mode-label">vs Computador</span>
-              <span class="mode-desc">Jogue contra a IA</span>
-            </button>
-          </div>
-
-          <!-- Painel Multiplayer -->
-          <div id="panel-multiplayer" class="mode-panel">
-            <button id="btn-create" class="btn btn-primary btn-full">Criar sala online</button>
-            <div class="divider"><span>ou entre em uma sala</span></div>
-            <div class="join-group">
-              <input id="input-room" type="text" placeholder="Código da sala" maxlength="6" />
-              <button id="btn-join" class="btn btn-secondary">Entrar</button>
+          <div class="status-card">
+            <span class="status-label">Estado da partida</span>
+            <div id="lobby-status" class="status-value">Crie ou entre em uma sala</div>
+            <div class="mode-selector">
+              <button class="mode-btn active" data-mode="multiplayer">
+                <span class="mode-label">Jogador online</span>
+                <span class="mode-desc">Crie ou entre em uma sala</span>
+              </button>
+              <button class="mode-btn" data-mode="ai">
+                <span class="mode-label">vs Computador</span>
+                <span class="mode-desc">Jogue contra a IA</span>
+              </button>
             </div>
-            <div class="divider"><span>ou assista uma partida</span></div>
-            <div class="join-group">
-              <input id="input-spectate" type="text" placeholder="Código da sala" maxlength="6" />
-              <button id="btn-spectate" class="btn btn-ghost">👁 Assistir</button>
-            </div>
-          </div>
 
-          <!-- Painel IA -->
-          <div id="panel-ai" class="mode-panel hidden">
-            <div class="ai-options">
-              <div class="option-group">
-                <span class="option-label">Jogar como</span>
-                <div class="color-selector">
-                  <button class="color-btn active" data-color="w">♙ Brancas</button>
-                  <button class="color-btn" data-color="random">🎲 Aleatório</button>
-                  <button class="color-btn" data-color="b">♟ Pretas</button>
+            <div id="panel-multiplayer" class="mode-panel">
+              <button id="btn-create" class="btn btn-primary btn-full">Criar sala online</button>
+              <div id="join-room-row" class="join-group">
+                <input id="input-room" type="text" placeholder="CÓDIGO" maxlength="6" />
+                <button id="btn-join" class="btn btn-secondary">Entrar</button>
+              </div>
+              <div id="current-room-code" class="room-code"></div>
+              <button id="btn-invite-room" class="btn btn-secondary btn-full hidden">Convidar jogador</button>
+              <p id="lobby-error" class="panel-note">Entre pelo portal para jogar online com outro jogador.</p>
+            </div>
+
+            <div id="panel-ai" class="mode-panel hidden">
+              <div class="ai-options">
+                <div class="option-group">
+                  <span class="option-label">Jogar como</span>
+                  <div class="color-selector">
+                    <button class="color-btn active" data-color="w">♙ Brancas</button>
+                    <button class="color-btn" data-color="random">🎲 Aleatório</button>
+                    <button class="color-btn" data-color="b">♟ Pretas</button>
+                  </div>
+                </div>
+                <div class="option-group">
+                  <span class="option-label">Dificuldade</span>
+                  <div class="difficulty-selector">
+                    <button class="diff-btn" data-level="iniciante">
+                      <span class="diff-name">Iniciante</span>
+                      <span class="diff-desc">Para aprender</span>
+                      <span class="diff-stars">★☆☆☆</span>
+                    </button>
+                    <button class="diff-btn active" data-level="intermediario">
+                      <span class="diff-name">Intermediário</span>
+                      <span class="diff-desc">Desafiador</span>
+                      <span class="diff-stars">★★☆☆</span>
+                    </button>
+                    <button class="diff-btn" data-level="avancado">
+                      <span class="diff-name">Avançado</span>
+                      <span class="diff-desc">Difícil</span>
+                      <span class="diff-stars">★★★☆</span>
+                    </button>
+                    <button class="diff-btn" data-level="expert">
+                      <span class="diff-name">Expert</span>
+                      <span class="diff-desc">Implacável</span>
+                      <span class="diff-stars">★★★★</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div class="option-group">
-                <span class="option-label">Dificuldade</span>
-                <div class="difficulty-selector">
-                  <button class="diff-btn" data-level="iniciante">
-                    <span class="diff-name">Iniciante</span>
-                    <span class="diff-desc">Para aprender</span>
-                    <span class="diff-stars">★☆☆☆</span>
-                  </button>
-                  <button class="diff-btn active" data-level="intermediario">
-                    <span class="diff-name">Intermediário</span>
-                    <span class="diff-desc">Desafiador</span>
-                    <span class="diff-stars">★★☆☆</span>
-                  </button>
-                  <button class="diff-btn" data-level="avancado">
-                    <span class="diff-name">Avançado</span>
-                    <span class="diff-desc">Difícil</span>
-                    <span class="diff-stars">★★★☆</span>
-                  </button>
-                  <button class="diff-btn" data-level="expert">
-                    <span class="diff-name">Expert</span>
-                    <span class="diff-desc">Implacável</span>
-                    <span class="diff-stars">★★★★</span>
-                  </button>
-                </div>
-              </div>
+              <button id="btn-start-ai" class="btn btn-primary btn-full">Iniciar Partida</button>
             </div>
-            <button id="btn-start-ai" class="btn btn-primary btn-full">Iniciar Partida</button>
           </div>
 
-          <p id="lobby-error" class="error-msg"></p>
+          <div class="rules-card">
+            <h2>Como jogar Xadrez</h2>
+            <ol>
+              <li>O objetivo é dar xeque-mate: atacar o rei adversário sem que ele tenha defesa.</li>
+              <li>Peças diferentes se movem de formas diferentes: rei, dama, torres, bispos, cavalos e peões.</li>
+              <li>Quando seu rei está em xeque, a próxima jogada precisa remover essa ameaça.</li>
+              <li>Peões promovem ao chegar na última fileira, normalmente virando dama.</li>
+              <li>A partida também pode terminar em empate por afogamento, repetição ou falta de material.</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
@@ -367,5 +529,6 @@
   <script src="js/ai.js?v=20260612-1320"></script>
   <script src="../shared/legacy-lobby.js?v=20260612-1320"></script>
   <script src="js/app.js?v=20260612-1320"></script>
+  <script src="js/lobby-panel.js?v=20260612-1725"></script>
 </body>
 </html>
