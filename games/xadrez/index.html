@@ -11,7 +11,7 @@
 <body>
 
   <!-- ========== AUTH ========== -->
-  <div id="screen-auth" class="screen active">
+  <div id="screen-auth" class="screen">
     <div class="auth-container">
       <div class="logo">
         <span class="logo-icon">♟</span>
@@ -77,7 +77,7 @@
   </div>
 
   <!-- ========== LOBBY ========== -->
-  <div id="screen-lobby" class="screen">
+  <div id="screen-lobby" class="screen active">
     <div style="display:flex; flex-direction:column; width:100%; min-height:100vh;">
 
       <!-- Header -->
@@ -98,17 +98,12 @@
       <div class="lobby-body">
         <div class="lobby-container">
           <div class="lobby-preview" aria-hidden="true">
-            <div class="legacy-preview-board chess-preview">
-              <span class="preview-piece light" style="--x:0;--y:7">♖</span>
-              <span class="preview-piece light" style="--x:1;--y:7">♘</span>
-              <span class="preview-piece light" style="--x:2;--y:7">♗</span>
-              <span class="preview-piece light" style="--x:3;--y:7">♕</span>
-              <span class="preview-piece light" style="--x:4;--y:7">♔</span>
-              <span class="preview-piece dark" style="--x:0;--y:0">♜</span>
-              <span class="preview-piece dark" style="--x:1;--y:0">♞</span>
-              <span class="preview-piece dark" style="--x:2;--y:0">♝</span>
-              <span class="preview-piece dark" style="--x:3;--y:0">♛</span>
-              <span class="preview-piece dark" style="--x:4;--y:0">♚</span>
+            <div class="board-wrapper lobby-board-wrapper">
+              <div class="coords-file"></div>
+              <div class="coords-rank"></div>
+              <div class="chessboard lobby-real-board" data-lobby-board="xadrez"></div>
+              <div class="coords-rank"></div>
+              <div class="coords-file"></div>
             </div>
           </div>
           <div class="logo">
@@ -369,6 +364,7 @@
   <!-- App -->
   <script src="js/chess-engine.js"></script>
   <script src="js/ai.js"></script>
+  <script src="../shared/legacy-lobby.js?v=20260612-1225"></script>
   <script src="js/app.js"></script>
   <a class="portal-back-link" href="../../">← Portal de Jogos</a>
 </body>
