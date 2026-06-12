@@ -82,23 +82,32 @@ a { color: inherit; text-decoration: none; }
 }
 
 .game-page {
-  width: min(1180px, 100%);
+  width: fit-content;
+  max-width: calc(100% - 32px);
   margin: 0 auto;
   padding: clamp(16px, 2.8vw, 30px);
   display: grid;
-  grid-template-columns: minmax(290px, 360px) minmax(0, 1fr);
-  gap: clamp(18px, 3vw, 34px);
+  grid-template-columns: minmax(0, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad))) minmax(280px, 330px);
+  gap: clamp(16px, 2vw, 24px);
   align-items: start;
 }
 
 .side-panel {
   display: grid;
   gap: 12px;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
 }
 
 .intro {
   display: grid;
-  gap: 8px;
+  order: 4;
+  gap: 6px;
+  padding: 12px 14px;
+  background: rgba(23,26,38,0.72);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 
 .eyebrow {
@@ -113,8 +122,8 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3, p { margin-top: 0; }
 h1 {
   margin-bottom: 0;
-  font-size: clamp(30px, 3vw, 40px);
-  line-height: 1.04;
+  font-size: 18px;
+  line-height: 1.15;
   letter-spacing: 0;
 }
 
@@ -133,9 +142,13 @@ h1 {
 }
 
 .status-card {
+  order: 1;
   display: grid;
   gap: 9px;
 }
+
+.score-card { order: 2; }
+.rules-card { order: 3; }
 
 .status-label {
   color: var(--muted);
@@ -191,7 +204,9 @@ h1 {
   place-items: center;
   width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
   min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
-  justify-self: center;
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: end;
   align-self: start;
   contain: layout paint;
 }
@@ -250,9 +265,16 @@ h1 {
     --stage-pad: 12px;
   }
   .game-page { grid-template-columns: minmax(0, 1fr); }
-  .side-panel { order: 2; }
+  .side-panel {
+    order: 2;
+    grid-column: auto;
+    grid-row: auto;
+  }
   .board-stage {
     order: 1;
+    grid-column: auto;
+    grid-row: auto;
+    justify-self: center;
     width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
     min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
   }

@@ -53,7 +53,7 @@
     }
     .mode-switch {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 8px;
     }
     .mode-switch .btn.active {
@@ -62,6 +62,7 @@
     }
     @media (max-width: 900px) {
       :root { --board-size: min(92vw, 500px); }
+      .mode-switch { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
