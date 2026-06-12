@@ -129,6 +129,7 @@ function render() {
   board.forEach((value, index) => {
     const cell = document.createElement("button");
     cell.className = "cell";
+    if (value) cell.classList.add(value === "X" ? "mark-x" : "mark-o");
     if (winningLine.includes(index)) cell.classList.add("win");
     cell.textContent = value;
     cell.setAttribute("aria-label", "Casa " + (index + 1));

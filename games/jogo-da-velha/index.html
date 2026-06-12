@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo da Velha Online</title>
-  <link rel="stylesheet" href="../_shared/board-game.css" />
+  <link rel="stylesheet" href="../shared/board-game.css" />
   <style>
     .ttt-board {
       width: min(92vw, 520px);
@@ -29,8 +29,20 @@
       display: grid;
       place-items: center;
     }
+    .cell.mark-x {
+      color: #c53737;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.42);
+    }
+    .cell.mark-o {
+      color: #1f63c8;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.42);
+    }
     .cell:hover { outline: 5px solid rgba(233,180,76,0.32); }
-    .cell.win { background: #4fb286; color: #08110d; }
+    .cell.win {
+      background: #4fb286;
+      color: #08110d;
+      text-shadow: none;
+    }
     .mode-switch {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -71,9 +83,9 @@
 
         <div class="score-card">
           <div class="metric-grid">
-            <div class="metric"><strong id="score-x">0</strong><span>X</span></div>
+            <div class="metric metric-x"><strong id="score-x">0</strong><span>X</span></div>
             <div class="metric"><strong id="score-draw">0</strong><span>Empates</span></div>
-            <div class="metric"><strong id="score-o">0</strong><span>O</span></div>
+            <div class="metric metric-o"><strong id="score-o">0</strong><span>O</span></div>
           </div>
         </div>
 
