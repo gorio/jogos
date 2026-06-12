@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo da Velha Online</title>
-  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1118" />
+  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1132" />
   <style>
     :root {
-      --board-size: min(540px, 43vw, calc(100vh - 190px));
+      --board-size: min(560px, 44vw, calc(100vh - 190px));
     }
     .ttt-board {
       width: var(--board-size);
@@ -15,8 +15,9 @@
       aspect-ratio: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      padding: 10px;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px;
       border-radius: 8px;
       background: #11131d;
       border: 1px solid var(--line);
@@ -27,23 +28,45 @@
       border-radius: 8px;
       background: #f2dfb5;
       color: #15110a;
-      font-size: clamp(40px, 5.8vw, 72px);
-      font-weight: 900;
-      line-height: 1;
       display: grid;
       place-items: center;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
+      position: relative;
       contain: layout paint;
+    }
+    .cell .mark {
+      width: 44%;
+      aspect-ratio: 1;
+      position: relative;
+      display: block;
     }
     .cell.mark-x {
       color: #c53737;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.42);
     }
+    .cell.mark-x .mark::before,
+    .cell.mark-x .mark::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18%;
+      height: 112%;
+      border-radius: 999px;
+      background: #c53737;
+      box-shadow: 0 2px 0 rgba(255,255,255,0.38);
+      transform-origin: center;
+    }
+    .cell.mark-x .mark::before { transform: translate(-50%, -50%) rotate(45deg); }
+    .cell.mark-x .mark::after { transform: translate(-50%, -50%) rotate(-45deg); }
     .cell.mark-o {
       color: #1f63c8;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.42);
+    }
+    .cell.mark-o .mark {
+      border: clamp(7px, 0.82vw, 11px) solid #1f63c8;
+      border-radius: 50%;
+      box-shadow: 0 2px 0 rgba(255,255,255,0.38);
     }
     .cell:hover { outline: 5px solid rgba(233,180,76,0.32); }
     .cell.win {
@@ -61,7 +84,7 @@
       color: #15110a;
     }
     @media (max-width: 900px) {
-      :root { --board-size: min(92vw, 540px); }
+      :root { --board-size: min(92vw, 560px); }
       .mode-switch { grid-template-columns: 1fr 1fr; }
     }
   </style>

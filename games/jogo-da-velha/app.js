@@ -129,10 +129,16 @@ function render() {
   board.forEach((value, index) => {
     const cell = document.createElement("button");
     cell.className = "cell";
-    if (value) cell.classList.add(value === "X" ? "mark-x" : "mark-o");
+    if (value) {
+      cell.classList.add(value === "X" ? "mark-x" : "mark-o");
+      cell.dataset.mark = value;
+      const mark = document.createElement("span");
+      mark.className = "mark";
+      mark.setAttribute("aria-hidden", "true");
+      cell.appendChild(mark);
+    }
     if (winningLine.includes(index)) cell.classList.add("win");
-    cell.textContent = value;
-    cell.setAttribute("aria-label", "Casa " + (index + 1));
+    cell.setAttribute("aria-label", "Casa " + (index + 1) + (value ? ", " + value : ", vazia"));
     cell.addEventListener("click", () => play(index));
     container.appendChild(cell);
   });
