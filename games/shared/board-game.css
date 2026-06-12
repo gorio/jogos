@@ -10,6 +10,8 @@
   --danger: #ee5d5a;
   --shadow: 0 22px 60px rgba(0,0,0,0.34);
   --radius: 8px;
+  --board-size: clamp(360px, 46vw, 620px);
+  --stage-pad: clamp(12px, 2.4vw, 24px);
 }
 
 * { box-sizing: border-box; }
@@ -80,11 +82,11 @@ a { color: inherit; text-decoration: none; }
 }
 
 .game-page {
-  width: min(1240px, 100%);
+  width: min(1320px, 100%);
   margin: 0 auto;
   padding: clamp(18px, 4vw, 42px);
   display: grid;
-  grid-template-columns: minmax(280px, 0.72fr) minmax(320px, 1.28fr);
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
   gap: clamp(20px, 4vw, 42px);
   align-items: start;
 }
@@ -145,6 +147,10 @@ h1 {
 .status-value {
   font-size: 22px;
   font-weight: 850;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  overflow-wrap: anywhere;
 }
 
 .controls {
@@ -165,6 +171,7 @@ h1 {
   background: var(--panel-2);
   color: var(--text);
   font-weight: 800;
+  white-space: nowrap;
   transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
@@ -177,11 +184,15 @@ h1 {
   background: rgba(23,26,38,0.68);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: clamp(12px, 2.4vw, 24px);
+  padding: var(--stage-pad);
   box-shadow: var(--shadow);
   display: grid;
   place-items: center;
-  min-height: 420px;
+  width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
+  min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
+  justify-self: center;
+  align-self: start;
+  contain: layout paint;
 }
 
 .metric-grid {
@@ -197,10 +208,15 @@ h1 {
   padding: 12px;
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .metric strong { font-size: 20px; }
-.metric span { color: var(--muted); font-size: 12px; }
+.metric span {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
 
 .rules-card h2 {
   font-size: 18px;
@@ -227,9 +243,14 @@ h1 {
 }
 
 @media (max-width: 900px) {
-  .game-page { grid-template-columns: 1fr; }
+  :root { --board-size: min(92vw, 560px); }
+  .game-page { grid-template-columns: minmax(0, 1fr); }
   .side-panel { order: 2; }
-  .board-stage { order: 1; min-height: auto; }
+  .board-stage {
+    order: 1;
+    width: min(100%, calc(var(--board-size) + var(--stage-pad) + var(--stage-pad)));
+    min-height: calc(var(--board-size) + var(--stage-pad) + var(--stage-pad));
+  }
 }
 
 @media (max-width: 560px) {

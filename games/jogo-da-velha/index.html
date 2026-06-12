@@ -6,8 +6,12 @@
   <title>Jogo da Velha Online</title>
   <link rel="stylesheet" href="../shared/board-game.css" />
   <style>
+    :root {
+      --board-size: clamp(420px, 43vw, 600px);
+    }
     .ttt-board {
-      width: min(92vw, 520px);
+      width: var(--board-size);
+      max-width: 100%;
       aspect-ratio: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -28,6 +32,10 @@
       line-height: 1;
       display: grid;
       place-items: center;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      contain: layout paint;
     }
     .cell.mark-x {
       color: #c53737;
@@ -51,6 +59,9 @@
     .mode-switch .btn.active {
       background: var(--accent);
       color: #15110a;
+    }
+    @media (max-width: 900px) {
+      :root { --board-size: min(92vw, 540px); }
     }
   </style>
 </head>
