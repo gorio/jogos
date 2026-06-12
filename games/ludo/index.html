@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ludo Online</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎲</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .ludo-board {
+      border: 4px solid #050505;
+      box-shadow: var(--shadow), 0 0 0 2px rgba(255,255,255,0.08);
+    }
+    .ludo-cell {
+      border: 1.5px solid rgba(0,0,0,0.62);
+    }
+    .home-yard {
+      background: #f7efd9;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    }
+    .base-pocket::before {
+      content: '';
+      position: absolute;
+      inset: 17%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.54);
+      border: 2px solid rgba(0,0,0,0.5);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.22);
+      z-index: 0;
+    }
+    .pawn {
+      position: absolute;
+      padding: 0;
+      line-height: 1;
+      appearance: none;
+      z-index: 3;
+    }
+    .red-pocket { color: var(--ludo-red); }
+    .blue-pocket { color: var(--ludo-blue); }
+    .green-pocket { color: var(--ludo-green); }
+    .yellow-pocket { color: var(--ludo-yellow); }
+    .red-entry,
+    .blue-entry,
+    .green-entry,
+    .yellow-entry {
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.36), inset 0 0 0 4.5px rgba(0,0,0,0.42);
+    }
+    .center-final {
+      background: conic-gradient(from 45deg, var(--ludo-blue) 0 25%, var(--ludo-green) 0 50%, var(--ludo-yellow) 0 75%, var(--ludo-red) 0 100%);
+    }
+    .center-final::after {
+      content: '';
+      width: 52%;
+      height: 52%;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="screen-auth" class="screen active">
+    <div class="auth-container">
+      <div class="logo">
+        <span class="logo-icon">🎲</span>
+        <h1>Ludo Online</h1>
+        <p>Faça login para salvar seu histórico de partidas</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Entrar</button>
+        <button class="auth-tab" data-tab="register">Cadastrar</button>
+      </div>
+
+      <div id="tab-login" class="auth-panel">
+        <button id="btn-login-google" class="btn btn-google btn-full">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Entrar com Google
+        </button>
+        <div class="divider"><span>ou com e-mail</span></div>
+        <div class="form-group">
+          <input id="login-email" type="email" placeholder="E-mail" class="form-input" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <input id="login-password" type="password" placeholder="Senha" class="form-input" autocomplete="current-password" />
+        </div>
+        <button id="btn-login-email" class="btn btn-primary btn-full">Entrar</button>
+      </div>
+
+      <div id="tab-register" class="auth-panel hidden">
+        <button id="btn-register-google" class="btn btn-google btn-full">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Cadastrar com Google
+        </button>
+        <div class="divider"><span>ou com e-mail</span></div>
+        <div class="form-group">
+          <input id="reg-name" type="text" placeholder="Nome de exibição" class="form-input" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <input id="reg-email" type="email" placeholder="E-mail" class="form-input" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <input id="reg-password" type="password" placeholder="Senha (mín. 6 caracteres)" class="form-input" autocomplete="new-password" />
+        </div>
+        <button id="btn-register" class="btn btn-primary btn-full">Criar conta</button>
+      </div>
+
+      <p id="auth-error" class="error-msg"></p>
+    </div>
+  </div>
+
+  <div id="screen-lobby" class="screen">
+    <div class="app-shell">
+      <div class="app-header">
+        <div class="header-logo">🎲 Ludo Online</div>
+        <div class="header-user">
+          <div class="header-avatar-wrap">
+            <img id="header-photo" class="header-photo hidden" alt="Foto" />
+            <div id="header-initials" class="header-initials">?</div>
+          </div>
+          <span id="header-username" class="header-username"></span>
+          <button id="btn-history-ludo" class="btn btn-small btn-secondary">📋 Histórico</button>
+          <button id="btn-logout" class="btn btn-small btn-ghost">Sair</button>
+        </div>
+      </div>
+
+      <div class="lobby-body">
+        <div class="lobby-container">
+          <div class="logo">
+            <span class="logo-icon">🎲</span>
+            <h1>Nova Partida</h1>
+          </div>
+
+          <div class="mode-selector">
+            <button class="mode-btn active" data-mode="multiplayer">
+              <span class="mode-icon">👥</span>
+              <span class="mode-label">Multijogador</span>
+              <span class="mode-desc">Jogue contra amigos</span>
+            </button>
+            <button class="mode-btn" data-mode="ai">
+              <span class="mode-icon">🤖</span>
+              <span class="mode-label">vs Computador</span>
+              <span class="mode-desc">Jogue contra a IA</span>
+            </button>
+          </div>
+
+          <div id="panel-multiplayer" class="mode-panel">
+            <div class="option-group">
+              <span class="option-label">Jogadores humanos</span>
+              <div id="lobby-player-count" class="segmented">
+                <button class="seg-btn active" data-count="2">2</button>
+                <button class="seg-btn" data-count="3">3</button>
+                <button class="seg-btn" data-count="4">4</button>
+              </div>
+            </div>
+            <button id="btn-create-room" class="btn btn-primary btn-full">Criar Partida</button>
+            <div class="divider"><span>ou entre em uma sala</span></div>
+            <div class="join-group">
+              <input id="input-room" type="text" placeholder="Código da sala" maxlength="6" />
+              <button id="btn-join-room" class="btn btn-secondary">Entrar</button>
+            </div>
+            <div class="divider"><span>ou assista uma partida</span></div>
+            <div class="join-group">
+              <input id="input-spectate" type="text" placeholder="Código da sala" maxlength="6" />
+              <button id="btn-spectate-room" class="btn btn-ghost">👁 Assistir</button>
+            </div>
+          </div>
+
+          <div id="panel-ai" class="mode-panel hidden">
+            <div class="ai-options">
+              <div class="option-group">
+                <span class="option-label">Quantidade de IAs</span>
+                <div id="lobby-ai-count" class="segmented">
+                  <button class="seg-btn active" data-count="1">1 IA</button>
+                  <button class="seg-btn" data-count="2">2 IAs</button>
+                  <button class="seg-btn" data-count="3">3 IAs</button>
+                </div>
+              </div>
+            </div>
+            <button id="btn-start-ai-game" class="btn btn-primary btn-full">Iniciar Partida</button>
+          </div>
+
+          <button id="btn-live-games-ludo" class="btn btn-secondary btn-full">Partidas ao Vivo</button>
+          <p id="lobby-error" class="error-msg"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-waiting" class="screen">
+    <div class="waiting-container">
+      <div class="spinner"></div>
+      <h2>Aguardando jogadores...</h2>
+      <p>Compartilhe o código com seus amigos:</p>
+      <div class="room-code-box">
+        <span id="display-room-code">------</span>
+        <button id="btn-copy-room-code" class="btn btn-small btn-secondary">Copiar</button>
+      </div>
+      <span id="copy-feedback" class="copy-feedback"></span>
+      <p class="waiting-status"><span id="waiting-current-players">1</span> / <span id="waiting-max-players">2</span> jogadores na sala</p>
+      <div id="waiting-players-list" class="waiting-players-list"></div>
+      <button id="btn-start-multiplayer-game-host" class="btn btn-primary btn-full hidden">Iniciar Partida</button>
+      <button id="btn-cancel-game" class="btn btn-ghost">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div class="game-layout">
+      <div class="game-sidebar">
+        <div class="players-panel">
+          <h3>Jogadores</h3>
+          <ul id="players-list" class="players-list"></ul>
+        </div>
+        <div class="move-history-box">
+          <h3>Eventos</h3>
+          <div id="log-entries" class="move-history"></div>
+        </div>
+      </div>
+
+      <div class="board-area">
+        <div id="status-bar" class="status-bar">Conectando...</div>
+        <div id="dice-display" class="dice-display">🎲</div>
+        <div id="ludo-board" class="ludo-board"></div>
+        <div class="game-controls">
+          <button id="btn-roll" class="btn btn-primary">🎲 Rolar</button>
+          <button id="btn-resign" class="btn btn-danger hidden">Desistir</button>
+          <button id="btn-back-lobby" class="btn btn-ghost hidden">← Voltar</button>
+        </div>
+        <div id="spectator-bar" class="spectator-bar hidden">👁 Você está assistindo esta partida</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-ludo-history" class="screen">
+    <div class="history-layout">
+      <div class="history-header">
+        <button id="btn-history-ludo-back" class="btn btn-ghost">← Voltar</button>
+        <h2>Histórico de Partidas</h2>
+        <div id="ludo-history-stats" class="history-stats"></div>
+      </div>
+      <div id="ludo-history-list" class="history-list">
+        <div class="history-loading">Carregando...</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-ludo-live-games" class="screen">
+    <div class="history-layout">
+      <div class="history-header">
+        <button id="btn-live-games-ludo-back" class="btn btn-ghost">← Voltar</button>
+        <h2>Partidas ao Vivo</h2>
+      </div>
+      <div id="ludo-live-games-list" class="history-list">
+        <div class="history-loading">Carregando...</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-gameover" class="modal hidden">
+    <div class="modal-box">
+      <div id="gameover-icon" class="gameover-icon">🎲</div>
+      <h2 id="gameover-title">Fim de Jogo</h2>
+      <p id="gameover-msg"></p>
+      <div class="gameover-actions">
+        <button id="btn-gameover-new" class="btn btn-primary">Jogar Novamente</button>
+        <button id="btn-gameover-history" class="btn btn-secondary">Ver Histórico</button>
+        <button id="btn-gameover-lobby" class="btn btn-ghost">Voltar ao Lobby</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script src="ludo_constants.js?v=20260612-0115"></script>
+  <script src="auth.js?v=20260612-0115"></script>
+  <script src="history.js?v=20260612-0115"></script>
+  <script src="ludoengine.js?v=20260612-0115"></script>
+  <script src="ludoai.js?v=20260612-0115"></script>
+  <script src="app.js?v=20260612-0125"></script>
+  <script>
+    function getHomeYardColor(row, col) {
+      if (row >= 1 && row <= 4 && col >= 1 && col <= 4) return 'red';
+      if (row >= 1 && row <= 4 && col >= 10 && col <= 13) return 'blue';
+      if (row >= 10 && row <= 13 && col >= 10 && col <= 13) return 'green';
+      if (row >= 10 && row <= 13 && col >= 1 && col <= 4) return 'yellow';
+      return null;
+    }
+
+    function getBasePocketColor(row, col) {
+      for (const color of window.LUDO_CONSTANTS.LUDO_COLORS) {
+        if (window.LUDO_CONSTANTS.BASE_POSITIONS[color].some(pos => pos[0] === row && pos[1] === col)) {
+          return color;
+        }
+      }
+      return null;
+    }
+
+    function normalizeLudoEngineState(targetEngine) {
+      if (!targetEngine || !Array.isArray(targetEngine.players)) return;
+      const pathCoords = window.LUDO_CONSTANTS.PATH_COORDS || [];
+      const homePaths = window.LUDO_CONSTANTS.HOME_PATHS || {};
+      const piecesPerPlayer = window.LUDO_CONSTANTS.PIECES_PER_PLAYER || 4;
+
+      if (!Number.isInteger(targetEngine.activePlayerIndex) ||
+          targetEngine.activePlayerIndex < 0 ||
+          targetEngine.activePlayerIndex >= targetEngine.players.length) {
+        targetEngine.activePlayerIndex = 0;
+      }
+
+      targetEngine.players.forEach(function(player) {
+        if (!Array.isArray(player.pawns)) player.pawns = [];
+        while (player.pawns.length < piecesPerPlayer) {
+          player.pawns.push({ pos: -1, homeStep: -1, finished: false });
+        }
+        player.score = 0;
+
+        player.pawns.forEach(function(pawn) {
+          if (!pawn || typeof pawn !== 'object') return;
+          if (!Number.isInteger(pawn.pos)) pawn.pos = -1;
+          if (!Number.isInteger(pawn.homeStep)) pawn.homeStep = -1;
+
+          const homePath = homePaths[player.color] || [];
+          const validHome = pawn.homeStep >= 0 && pawn.homeStep < homePath.length && Boolean(homePath[pawn.homeStep]);
+
+          if (pawn.finished) {
+            pawn.pos = -2;
+            pawn.homeStep = window.LUDO_CONSTANTS.HOME_PATH_LENGTH - 1;
+            player.score += 1;
+            return;
+          }
+
+          if (pawn.pos === -2 || pawn.homeStep !== -1) {
+            if (validHome) {
+              pawn.pos = -2;
+            } else {
+              pawn.pos = -1;
+              pawn.homeStep = -1;
+            }
+            return;
+          }
+
+          if (pawn.pos !== -1 && !pathCoords[pawn.pos]) {
+            pawn.pos = -1;
+            pawn.homeStep = -1;
+          }
+        });
+      });
+    }
+
+    const originalDeserialize = LudoEngine.prototype.deserialize;
+    LudoEngine.prototype.deserialize = function(serializedState) {
+      originalDeserialize.call(this, serializedState);
+      normalizeLudoEngineState(this);
+    };
+
+    LudoEngine.prototype._calculateNewPosition = function(player, pawn, dice) {
+      const constants = window.LUDO_CONSTANTS;
+      const pathCoords = constants.PATH_COORDS || [];
+      const homePath = player && constants.HOME_PATHS[player.color];
+      if (!player || !pawn || !Number.isInteger(dice) || dice < 1) return { valid: false };
+      if (pawn.finished) return { valid: false };
+
+      if (pawn.pos === -2 || pawn.homeStep !== -1) {
+        if (!homePath || !Number.isInteger(pawn.homeStep) || !homePath[pawn.homeStep]) {
+          return { valid: false };
+        }
+        const newHomeStep = pawn.homeStep + dice;
+        if (newHomeStep < constants.HOME_PATH_LENGTH && homePath[newHomeStep]) {
+          return { valid: true, targetPos: newHomeStep, isHomePath: true };
+        }
+        return { valid: false };
+      }
+
+      if (pawn.pos === -1 || !pathCoords[pawn.pos]) return { valid: false };
+
+      const playerStartPos = constants.HOME_START_POS[player.color];
+      const finalEntryCoord = constants.FINAL_ENTRY_BOARD_POS[player.color];
+      if (!Number.isInteger(playerStartPos) || !finalEntryCoord) return { valid: false };
+
+      const finalEntryPathIndex = pathCoords.findIndex(function(coord) {
+        return coord[0] === finalEntryCoord[0] && coord[1] === finalEntryCoord[1];
+      });
+      if (finalEntryPathIndex === -1) return { valid: false };
+
+      const pathLength = constants.BOARD_STEPS;
+      const currentPathIndex = pawn.pos;
+      const relativeCurrentPos = (currentPathIndex - playerStartPos + pathLength) % pathLength;
+      const relativeFinalEntryPos = (finalEntryPathIndex - playerStartPos + pathLength) % pathLength;
+      const relativeNewPos = relativeCurrentPos + dice;
+
+      if (relativeCurrentPos <= relativeFinalEntryPos && relativeNewPos > relativeFinalEntryPos) {
+        const stepsIntoHomePath = relativeNewPos - relativeFinalEntryPos - 1;
+        if (stepsIntoHomePath >= 0 && stepsIntoHomePath < constants.HOME_PATH_LENGTH && homePath && homePath[stepsIntoHomePath]) {
+          return { valid: true, targetPos: stepsIntoHomePath, isHomePath: true };
+        }
+        return { valid: false };
+      }
+
+      const targetGlobalPathIndex = (currentPathIndex + dice) % pathLength;
+      return pathCoords[targetGlobalPathIndex]
+        ? { valid: true, targetPos: targetGlobalPathIndex, isHomePath: false }
+        : { valid: false };
+    };
+
+    LudoEngine.prototype.getValidMoves = function() {
+      normalizeLudoEngineState(this);
+      const player = this.activePlayer;
+      const moves = [];
+      if (!player || !Array.isArray(player.pawns)) return moves;
+
+      player.pawns.forEach((pawn, index) => {
+        if (!pawn || pawn.finished) return;
+
+        if (pawn.pos === -1) {
+          if (this.diceValue === 6) {
+            const startPos = window.LUDO_CONSTANTS.HOME_START_POS[player.color];
+            const isBlocked = player.pawns.some((otherPawn, otherIndex) =>
+              otherIndex !== index && otherPawn.pos === startPos && otherPawn.homeStep === -1
+            );
+            if (!isBlocked) moves.push(index);
+          }
+          return;
+        }
+
+        const newPosInfo = this._calculateNewPosition(player, pawn, this.diceValue);
+        if (!newPosInfo.valid) return;
+        if (!this._isOccupiedByOwnPawn(player, newPosInfo.targetPos, newPosInfo.isHomePath, index)) {
+          moves.push(index);
+        }
+      });
+
+      return moves;
+    };
+
+    const originalRollDice = LudoEngine.prototype.rollDice;
+    LudoEngine.prototype.rollDice = function() {
+      try {
+        normalizeLudoEngineState(this);
+        return originalRollDice.call(this);
+      } catch (err) {
+        console.error('Motor do Ludo recuperou um erro ao rolar o dado.', err);
+        this.logEvent(this.activePlayer ? this.activePlayer.color : 'neutral', 'Erro recuperado no turno. A vez foi passada para manter a partida ativa.');
+        this.nextTurn();
+      }
+    };
+
+    buildBoardDOM = function() {
+      const board = gel('ludo-board');
+      if (!board) return;
+      board.innerHTML = '';
+      boardCells = [];
+      for (let row = 0; row < window.LUDO_CONSTANTS.BOARD_SIZE; row++) {
+        boardCells[row] = [];
+        for (let col = 0; col < window.LUDO_CONSTANTS.BOARD_SIZE; col++) {
+          const cell = document.createElement('div');
+          cell.className = 'ludo-cell ' + getCellZone(row, col);
+          cell.dataset.row = row;
+          cell.dataset.col = col;
+          const homeColor = getHomeYardColor(row, col);
+          const pocketColor = getBasePocketColor(row, col);
+          if (homeColor) cell.classList.add('home-yard', homeColor + '-yard');
+          if (pocketColor) cell.classList.add('base-pocket', pocketColor + '-pocket');
+          if (isSafeCell(row, col)) cell.classList.add('safe');
+          board.appendChild(cell);
+          boardCells[row][col] = cell;
+        }
+      }
+    };
+
+    renderBoard = function() {
+      document.querySelectorAll('.pawn').forEach(pawn => pawn.remove());
+      if (!engine || !engine.players) return;
+
+      const pawnsByCell = new Map();
+      engine.players.forEach(function(player) {
+        player.pawns.forEach(function(pawn, index) {
+          if (pawn.finished) return;
+          const coords = pawnCoords(player, pawn, index);
+          if (!coords || !boardCells[coords[0]] || !boardCells[coords[0]][coords[1]]) return;
+          const key = coords[0] + ',' + coords[1];
+          if (!pawnsByCell.has(key)) pawnsByCell.set(key, []);
+          pawnsByCell.get(key).push({ player, index, coords });
+        });
+      });
+
+      pawnsByCell.forEach(function(items) {
+        const layout = getPawnCellLayout(items.length);
+        items.forEach(function(item, stackIndex) {
+          const slot = layout.slots[stackIndex] || layout.slots[0];
+          const pawnEl = document.createElement('button');
+          pawnEl.type = 'button';
+          pawnEl.className = 'pawn ' + item.player.color;
+          pawnEl.dataset.color = item.player.color;
+          pawnEl.dataset.index = item.index;
+          pawnEl.style.width = layout.size + '%';
+          pawnEl.style.height = layout.size + '%';
+          pawnEl.style.left = slot[0] + '%';
+          pawnEl.style.top = slot[1] + '%';
+          pawnEl.textContent = window.LUDO_CONSTANTS.PIECES_SYMBOLS[item.player.color] || '';
+          if (isMyTurn() && engine.phase === 'move' && engine.getValidMoves().includes(item.index)) {
+            pawnEl.classList.add('movable');
+            pawnEl.addEventListener('click', () => doMovePawn(item.index));
+          }
+          boardCells[item.coords[0]][item.coords[1]].appendChild(pawnEl);
+        });
+      });
+    };
+
+    function getPawnCellLayout(count) {
+      if (count <= 1) return { size: 72, slots: [[14, 14]] };
+      if (count === 2) return { size: 44, slots: [[5, 28], [51, 28]] };
+      if (count === 3) return { size: 40, slots: [[7, 7], [53, 7], [30, 53]] };
+      return { size: 38, slots: [[8, 8], [54, 8], [8, 54], [54, 54]] };
+    }
+
+    onRollDiceClick = async function() {
+      if (!isMyTurn() || engine.phase !== 'roll' || aiThinking) return;
+      engine.rollDice();
+      renderGame();
+      await syncGameState();
+
+      if (engine.status === 'finished') {
+        await finishLocalGame('win', currentAuthManager.displayName + ' venceu a partida!');
+        return;
+      }
+
+      maybeRunAI();
+    };
+
+    doAITurn = async function() {
+      if (!gameActive || !engine.activePlayer || !engine.activePlayer.isAI || engine.status !== 'playing') return;
+      aiThinking = true;
+      renderGame();
+      try {
+        await wait(700);
+
+        if (engine.phase === 'roll') {
+          engine.rollDice();
+          renderGame();
+          await syncGameState();
+          await wait(500);
+        }
+
+        if (engine.phase === 'move') {
+          const validMoves = engine.getValidMoves();
+          if (validMoves.length > 0) {
+            let move = null;
+            try {
+              move = ai.getBestMove(engine);
+            } catch (err) {
+              console.error('Falha ao calcular jogada da IA. Usando fallback.', err);
+              move = validMoves[0];
+            }
+
+            if (move !== null && validMoves.includes(move)) {
+              engine.doMovePawn(move);
+            } else {
+              engine.doMovePawn(validMoves[0]);
+            }
+          }
+        }
+      } finally {
+        aiThinking = false;
+      }
+
+      renderGame();
+      await syncGameState();
+
+      if (engine.status === 'finished') {
+        const winner = engine.players.find(player => player.id === engine.winner);
+        await finishLocalGame(engine.winner === currentAuthManager.uid ? 'win' : 'loss', (winner ? winner.name : 'Alguém') + ' venceu a partida!');
+        return;
+      }
+      maybeRunAI();
+    };
+  </script>
+  <a class="portal-back-link" href="../../">← Portal de Jogos</a>
+</body>
+</html>

@@ -9,9 +9,9 @@ const FIREBASE_CONFIG = {
 };
 
 const GAME_ROUTES = {
-  xadrez: { label: "Xadrez", url: "../xadrez/" },
-  dama: { label: "Dama", url: "../dama/" },
-  ludo: { label: "Ludo", url: "../ludo/" }
+  xadrez: { label: "Xadrez", url: "games/xadrez/" },
+  dama: { label: "Dama", url: "games/dama/" },
+  ludo: { label: "Ludo", url: "games/ludo/" }
 };
 
 let auth;

@@ -1,17 +1,17 @@
 # Jogos de Tabuleiro Online
 
-Este repositório passa a ser a porta de entrada única para o ecossistema de jogos.
+Este repositório é a fonte principal do ecossistema de jogos de tabuleiro online.
 
 ## Estado atual
 
 - `gorio/jogos`: portal central com login único, identidade do usuário e catálogo.
-- `gorio/xadrez`: jogo existente em `https://gorio.github.io/xadrez/`.
-- `gorio/dama`: jogo existente em `https://gorio.github.io/dama/`.
-- `gorio/ludo`: jogo existente em `https://gorio.github.io/ludo/`.
+- `games/xadrez`: código importado do antigo `gorio/xadrez`.
+- `games/dama`: código importado do antigo `gorio/dama`.
+- `games/ludo`: código importado do antigo `gorio/ludo`.
 
-Como todos rodam sob `gorio.github.io` e usam o mesmo projeto Firebase, a sessão de autenticação é compartilhada pelo navegador.
+Os repositórios individuais passam a ser fontes legadas. A evolução do produto deve acontecer neste repositório.
 
-## Arquitetura alvo
+## Arquitetura do monorepo
 
 ```text
 /jogos
@@ -30,8 +30,8 @@ Como todos rodam sob `gorio.github.io` e usam o mesmo projeto Firebase, a sessã
 
 ## Próximas etapas
 
-1. Migrar `auth.js`, `history.js` e estilos comuns para `/core`.
-2. Mover os motores dos jogos para `/games/<jogo>`.
+1. Extrair `auth.js`, `history.js` e estilos comuns para `/core`.
+2. Remover telas de login duplicadas dos jogos e usar apenas o login do portal.
 3. Padronizar contrato de salas:
    - `gameType`
    - `roomCode`
