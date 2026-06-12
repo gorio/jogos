@@ -105,7 +105,7 @@ window.addEventListener('DOMContentLoaded', function() {
       if (hp) { hp.src = ''; hp.classList.add('hidden'); }
       if (hi) { hi.style.display = 'flex'; hi.textContent = '?'; }
       window._myPhotoURL = null;
-      showScreen('auth');
+      window.location.href = '../../';
     }
   });
 });
