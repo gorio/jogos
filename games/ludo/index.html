@@ -61,7 +61,7 @@
 </head>
 <body>
 
-  <div id="screen-auth" class="screen active">
+  <div id="screen-auth" class="screen">
     <div class="auth-container">
       <div class="logo">
         <span class="logo-icon">🎲</span>
@@ -121,7 +121,7 @@
     </div>
   </div>
 
-  <div id="screen-lobby" class="screen">
+  <div id="screen-lobby" class="screen active">
     <div class="app-shell">
       <div class="app-header">
         <div class="header-logo">🎲 Ludo Online</div>
@@ -139,13 +139,7 @@
       <div class="lobby-body">
         <div class="lobby-container">
           <div class="lobby-preview" aria-hidden="true">
-            <div class="legacy-preview-board ludo-preview-board">
-              <span class="ludo-base-preview red"></span>
-              <span class="ludo-base-preview blue"></span>
-              <span class="ludo-base-preview green"></span>
-              <span class="ludo-base-preview yellow"></span>
-              <span class="ludo-center-preview"></span>
-            </div>
+            <div class="ludo-board lobby-real-board" data-lobby-board="ludo"></div>
           </div>
           <div class="logo">
             <span class="logo-icon">🎲</span>
@@ -299,6 +293,7 @@
   <script src="history.js?v=20260612-0115"></script>
   <script src="ludoengine.js?v=20260612-0115"></script>
   <script src="ludoai.js?v=20260612-0115"></script>
+  <script src="../shared/legacy-lobby.js?v=20260612-1225"></script>
   <script src="app.js?v=20260612-0125"></script>
   <script>
     function getHomeYardColor(row, col) {
