@@ -11,7 +11,7 @@
 <body>
 
   <!-- ========== AUTH ========== -->
-  <div id="screen-auth" class="screen active">
+  <div id="screen-auth" class="screen">
     <div class="auth-container">
       <div class="logo">
         <span class="logo-icon">⬛</span>
@@ -77,7 +77,7 @@
   </div>
 
   <!-- ========== LOBBY ========== -->
-  <div id="screen-lobby" class="screen">
+  <div id="screen-lobby" class="screen active">
     <div class="app-header">
       <div class="header-logo">⬛ Dama Online</div>
       <div class="header-user">
@@ -94,21 +94,12 @@
     <div class="lobby-body">
       <div class="lobby-container">
         <div class="lobby-preview" aria-hidden="true">
-          <div class="legacy-preview-board checkers-preview">
-            <span class="preview-man dark" style="--x:1;--y:0"></span>
-            <span class="preview-man dark" style="--x:3;--y:0"></span>
-            <span class="preview-man dark" style="--x:5;--y:0"></span>
-            <span class="preview-man dark" style="--x:7;--y:0"></span>
-            <span class="preview-man dark" style="--x:0;--y:1"></span>
-            <span class="preview-man dark" style="--x:2;--y:1"></span>
-            <span class="preview-man dark" style="--x:4;--y:1"></span>
-            <span class="preview-man light" style="--x:1;--y:6"></span>
-            <span class="preview-man light" style="--x:3;--y:6"></span>
-            <span class="preview-man light" style="--x:5;--y:6"></span>
-            <span class="preview-man light" style="--x:7;--y:6"></span>
-            <span class="preview-man light" style="--x:0;--y:7"></span>
-            <span class="preview-man light" style="--x:2;--y:7"></span>
-            <span class="preview-man light" style="--x:4;--y:7"></span>
+          <div class="board-wrapper lobby-board-wrapper">
+            <div class="coords-file"></div>
+            <div class="coords-rank"></div>
+            <div class="chessboard lobby-real-board" data-lobby-board="dama"></div>
+            <div class="coords-rank"></div>
+            <div class="coords-file"></div>
           </div>
         </div>
         <div class="logo">
@@ -365,6 +356,7 @@
   <!-- App -->
   <script src="js/dama-engine.js"></script>
   <script src="js/ai.js"></script>
+  <script src="../shared/legacy-lobby.js?v=20260612-1225"></script>
   <script src="js/app.js"></script>
   <a class="portal-back-link" href="../../">← Portal de Jogos</a>
 </body>
