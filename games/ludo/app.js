@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', function() {
       stopRoomListeners();
       gameActive = false;
       isSpectator = false;
-      window.location.href = '../../';
+      showScreen('lobby');
     }
   });
 });
@@ -1088,5 +1088,5 @@ function goLobby() {
   if (gel('input-room')) gel('input-room').value = '';
   if (gel('input-spectate')) gel('input-spectate').value = '';
   clearLobbyError();
-  showScreen(currentAuthManager && currentAuthManager.uid ? 'lobby' : 'auth');
+  showScreen('lobby');
 }
