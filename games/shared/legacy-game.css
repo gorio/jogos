@@ -9,17 +9,34 @@
   --line: rgba(255,255,255,0.12);
   --radius: 8px;
   --shadow: 0 18px 44px rgba(0,0,0,0.3);
-  --board-size: min(520px, 40vw, calc(100vh - 220px));
-  --board-frame-size: calc(var(--board-size) + 44px);
-  --ludo-board-size: min(520px, 40vw, calc(100vh - 220px));
+  --stage-pad: 14px;
+  --coord-size: 22px;
+  --board-size: min(430px, 32vw, calc(100vh - 275px));
+  --board-frame-size: calc(var(--board-size) + (var(--coord-size) * 2));
+  --board-stage-size: calc(var(--board-frame-size) + (var(--stage-pad) * 2) + 2px);
+  --panel-size: 330px;
+  --layout-gap: clamp(16px, 2vw, 24px);
+  --ludo-board-size: min(430px, 32vw, calc(100vh - 275px));
+  --ludo-stage-size: calc(var(--ludo-board-size) + (var(--stage-pad) * 2) + 2px);
   --ludo-cell-size: calc(var(--ludo-board-size) / 15);
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
 body {
+  margin: 0;
+  min-height: 100vh;
   color: var(--text);
   background: radial-gradient(circle at 12% 8%, rgba(79,178,134,0.18), transparent 30%),
               radial-gradient(circle at 86% 0%, rgba(233,180,76,0.16), transparent 28%),
               var(--bg) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
 .screen {
@@ -59,21 +76,29 @@ body {
 
 .lobby-container:has(.lobby-preview) {
   display: grid !important;
-  grid-template-columns: minmax(360px, var(--board-size)) minmax(300px, 430px) !important;
-  gap: clamp(18px, 3vw, 34px) !important;
+  grid-template-columns: var(--ludo-stage-size) minmax(300px, var(--panel-size)) !important;
+  gap: var(--layout-gap) !important;
   align-items: start !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
+  width: auto !important;
+  max-width: calc(100vw - 32px) !important;
 }
 
 .lobby-container:has(.lobby-board-wrapper) {
-  grid-template-columns: minmax(var(--board-frame-size), var(--board-frame-size)) minmax(300px, 430px) !important;
+  grid-template-columns: var(--board-stage-size) minmax(300px, var(--panel-size)) !important;
+}
+
+.lobby-container:has(.ludo-board) {
+  grid-template-columns: var(--ludo-stage-size) minmax(300px, var(--panel-size)) !important;
 }
 
 .lobby-container:has(.lobby-preview) > :not(.lobby-preview) {
   grid-column: 2 !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .lobby-container:has(.lobby-preview) > .logo {
@@ -83,6 +108,8 @@ body {
   border: 1px solid var(--line) !important;
   border-radius: var(--radius) !important;
   background: rgba(23,26,38,0.72) !important;
+  display: grid !important;
+  gap: 6px !important;
 }
 
 .lobby-container:has(.lobby-preview) > .logo .logo-icon {
@@ -100,15 +127,23 @@ body {
   border: 1px solid var(--line) !important;
   background: rgba(23,26,38,0.68) !important;
   box-shadow: var(--shadow) !important;
-  padding: 14px !important;
+  padding: var(--stage-pad) !important;
   display: grid !important;
   place-items: center !important;
-  min-height: calc(var(--board-size) + 72px) !important;
+  width: var(--ludo-stage-size) !important;
+  min-height: var(--ludo-stage-size) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.lobby-container:has(.lobby-board-wrapper) .lobby-preview {
+  width: var(--board-stage-size) !important;
+  min-height: var(--board-stage-size) !important;
 }
 
 .lobby-board-wrapper {
   width: var(--board-frame-size) !important;
-  max-width: 100% !important;
+  max-width: none !important;
 }
 
 .lobby-preview .lobby-real-board {
@@ -136,13 +171,26 @@ body {
 }
 
 .logo h1 {
-  font-size: clamp(28px, 4vw, 40px) !important;
-  line-height: 1.05 !important;
+  margin: 0 !important;
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
 }
 
 .logo p,
 .mode-desc,
-.waiting-container p {
+.waiting-container p,
+.divider,
+.divider span,
+.option-label,
+.diff-desc,
+.panel-note,
+.move-history,
+.players-list,
+.waiting-status,
+.spectator-bar,
+.captured-pieces,
+.piece-count {
   color: var(--text-muted) !important;
 }
 
@@ -155,6 +203,9 @@ body {
   display: flex !important;
   align-items: center !important;
   gap: 18px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
 }
 
 .header-logo {
@@ -181,8 +232,15 @@ body {
 }
 
 .btn {
+  min-height: 38px !important;
+  padding: 0 14px !important;
   border-radius: var(--radius) !important;
   font-weight: 850 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
 }
 
 .btn-primary {
@@ -205,7 +263,7 @@ body {
 
 .lobby-body {
   min-height: calc(100vh - 58px) !important;
-  padding: 28px 16px !important;
+  padding: clamp(16px, 2.8vw, 30px) 16px !important;
   display: grid !important;
   place-items: center !important;
 }
@@ -226,6 +284,8 @@ body {
   background: rgba(32,38,56,0.86) !important;
   color: var(--text) !important;
   text-align: left !important;
+  display: grid !important;
+  gap: 3px !important;
 }
 
 .mode-btn.active {
@@ -256,6 +316,16 @@ body {
   background: rgba(255,255,255,0.035) !important;
   padding: 14px !important;
   order: 2 !important;
+  gap: 10px !important;
+}
+
+.mode-panel.hidden {
+  display: none !important;
+}
+
+.mode-panel:not(.hidden),
+.mode-panel.active {
+  display: grid !important;
 }
 
 .lobby-container:has(.lobby-preview) > .btn,
@@ -279,6 +349,43 @@ select {
   border: 1px solid var(--line) !important;
   background: rgba(255,255,255,0.06) !important;
   color: var(--text) !important;
+  padding: 0 12px !important;
+  font-weight: 800 !important;
+}
+
+.segmented,
+.color-selector,
+.difficulty-selector,
+.ai-options {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.segmented {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.color-selector {
+  grid-template-columns: 1fr !important;
+}
+
+.seg-btn,
+.color-btn,
+.diff-btn {
+  min-height: 38px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  background: rgba(32,38,56,0.86) !important;
+  color: var(--text) !important;
+  font-weight: 800 !important;
+}
+
+.seg-btn.active,
+.color-btn.active,
+.diff-btn.active {
+  background: var(--accent) !important;
+  color: #15110a !important;
+  border-color: transparent !important;
 }
 
 .waiting-container {
@@ -302,9 +409,13 @@ select {
   margin: 0 auto !important;
   padding: clamp(16px, 2.8vw, 30px) !important;
   display: grid !important;
-  grid-template-columns: auto minmax(280px, 330px) !important;
-  gap: clamp(16px, 2vw, 24px) !important;
+  grid-template-columns: var(--board-stage-size) var(--panel-size) !important;
+  gap: var(--layout-gap) !important;
   align-items: start !important;
+}
+
+.game-layout:has(.ludo-board) {
+  grid-template-columns: var(--ludo-stage-size) var(--panel-size) !important;
 }
 
 .board-area {
@@ -314,19 +425,26 @@ select {
   border: 1px solid var(--line) !important;
   background: rgba(23,26,38,0.68) !important;
   box-shadow: var(--shadow) !important;
-  padding: 14px !important;
+  padding: var(--stage-pad) !important;
   display: grid !important;
   justify-items: center !important;
   gap: 12px !important;
   align-self: start !important;
   justify-self: end !important;
+  width: var(--board-stage-size) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.game-layout:has(.ludo-board) .board-area {
+  width: var(--ludo-stage-size) !important;
 }
 
 .game-sidebar {
   grid-column: 2 !important;
   grid-row: 1 !important;
   width: 100% !important;
-  max-width: 330px !important;
+  max-width: var(--panel-size) !important;
   height: auto !important;
   display: grid !important;
   gap: 12px !important;
@@ -343,10 +461,52 @@ select {
   box-shadow: 0 12px 30px rgba(0,0,0,0.16) !important;
 }
 
+.player-card,
+.players-panel,
+.move-history-box {
+  padding: 14px !important;
+}
+
+.player-card {
+  min-height: 68px !important;
+}
+
+.player-card.active-turn {
+  border-color: rgba(233,180,76,0.58) !important;
+  box-shadow: 0 0 0 1px rgba(233,180,76,0.2), 0 12px 30px rgba(0,0,0,0.16) !important;
+}
+
+.player-label,
+.players-panel h3,
+.move-history-box h3 {
+  color: var(--text) !important;
+}
+
+.player-avatar,
+.header-initials {
+  background: rgba(233,180,76,0.12) !important;
+  color: var(--accent) !important;
+  border-color: rgba(233,180,76,0.28) !important;
+}
+
 .status-bar {
   min-height: 38px !important;
   padding: 10px 12px !important;
   color: var(--text) !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  font-weight: 850 !important;
+}
+
+.status-bar.your-turn {
+  border-color: rgba(79,178,134,0.45) !important;
+  color: #d8ffe9 !important;
+}
+
+.status-bar.check {
+  border-color: rgba(233,180,76,0.55) !important;
+  color: var(--accent) !important;
 }
 
 .board-wrapper,
@@ -357,6 +517,11 @@ select {
 
 .board-wrapper {
   width: var(--board-frame-size) !important;
+  display: grid !important;
+  grid-template-columns: var(--coord-size) var(--board-size) var(--coord-size) !important;
+  grid-template-rows: var(--coord-size) var(--board-size) var(--coord-size) !important;
+  gap: 0 !important;
+  flex: 0 0 auto !important;
 }
 
 .chessboard {
@@ -364,9 +529,18 @@ select {
   height: var(--board-size) !important;
 }
 
+.coords-file,
+.coords-rank {
+  color: var(--text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
 .ludo-board {
   width: var(--ludo-board-size) !important;
   height: var(--ludo-board-size) !important;
+  flex: 0 0 auto !important;
 }
 
 .game-controls {
@@ -379,10 +553,12 @@ select {
 .move-history-box {
   min-height: 180px !important;
   max-height: min(36vh, 260px) !important;
+  overflow: hidden !important;
 }
 
 .move-history {
   max-height: min(28vh, 210px) !important;
+  overflow: auto !important;
 }
 
 .history-layout,
@@ -394,9 +570,12 @@ select {
 
 @media (max-width: 900px) {
   :root {
-    --board-size: min(calc(92vw - 44px), 520px);
-    --board-frame-size: calc(var(--board-size) + 44px);
+    --stage-pad: 12px;
+    --board-size: min(calc(92vw - (var(--coord-size) * 2) - (var(--stage-pad) * 2) - 2px), 520px);
+    --board-frame-size: calc(var(--board-size) + (var(--coord-size) * 2));
+    --board-stage-size: calc(var(--board-frame-size) + (var(--stage-pad) * 2) + 2px);
     --ludo-board-size: min(92vw, 520px);
+    --ludo-stage-size: calc(var(--ludo-board-size) + (var(--stage-pad) * 2) + 2px);
   }
 
   .game-layout {
@@ -420,10 +599,22 @@ select {
     grid-column: auto !important;
     grid-row: auto !important;
     justify-self: center !important;
+    width: 100% !important;
   }
 
   .game-sidebar {
     max-width: 100% !important;
+  }
+
+  .lobby-preview,
+  .lobby-container:has(.lobby-board-wrapper) .lobby-preview {
+    width: 100% !important;
+    min-height: auto !important;
+  }
+
+  .lobby-container:has(.ludo-board) .lobby-preview,
+  .game-layout:has(.ludo-board) .board-area {
+    width: 100% !important;
   }
 }
 
