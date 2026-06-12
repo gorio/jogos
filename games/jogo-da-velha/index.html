@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jogo da Velha Online</title>
+  <link rel="stylesheet" href="../_shared/board-game.css" />
+  <style>
+    .ttt-board {
+      width: min(92vw, 520px);
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #11131d;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 52px rgba(0,0,0,0.36);
+    }
+    .cell {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      background: #f2dfb5;
+      color: #15110a;
+      font-size: clamp(54px, 16vw, 112px);
+      font-weight: 900;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+    }
+    .cell:hover { outline: 5px solid rgba(233,180,76,0.32); }
+    .cell.win { background: #4fb286; color: #08110d; }
+    .mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .mode-switch .btn.active {
+      background: var(--accent);
+      color: #15110a;
+    }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="game-topbar">
+      <a class="back-link" href="../../">Voltar ao portal</a>
+      <div class="game-title"><span>#</span> Jogo da Velha</div>
+      <div class="topbar-actions">
+        <button id="btn-reset" class="btn btn-secondary">Nova rodada</button>
+      </div>
+    </header>
+
+    <section class="game-page">
+      <aside class="side-panel">
+        <div class="intro">
+          <p class="eyebrow">Rápido e competitivo</p>
+          <h1>Jogo da Velha</h1>
+          <p>Faça três símbolos em linha. Jogue contra outra pessoa no mesmo dispositivo ou contra o computador.</p>
+        </div>
+
+        <div class="status-card">
+          <span class="status-label">Rodada</span>
+          <div id="status" class="status-value">Sua vez</div>
+          <div class="mode-switch" aria-label="Modo de jogo">
+            <button id="mode-local" class="btn active">2 jogadores</button>
+            <button id="mode-ai" class="btn">vs Computador</button>
+          </div>
+        </div>
+
+        <div class="score-card">
+          <div class="metric-grid">
+            <div class="metric"><strong id="score-x">0</strong><span>X</span></div>
+            <div class="metric"><strong id="score-draw">0</strong><span>Empates</span></div>
+            <div class="metric"><strong id="score-o">0</strong><span>O</span></div>
+          </div>
+        </div>
+
+        <div class="rules-card">
+          <h2>Como jogar</h2>
+          <ul>
+            <li>X sempre começa.</li>
+            <li>No modo computador, você joga de X.</li>
+            <li>A rodada termina com vitória ou empate.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <section class="board-stage">
+        <div id="board" class="ttt-board" aria-label="Tabuleiro de Jogo da Velha"></div>
+      </section>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

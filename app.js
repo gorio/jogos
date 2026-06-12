@@ -11,22 +11,42 @@ const FIREBASE_CONFIG = {
 const GAME_ROUTES = {
   xadrez: { label: "Xadrez", url: "games/xadrez/" },
   dama: { label: "Dama", url: "games/dama/" },
-  ludo: { label: "Ludo", url: "games/ludo/" }
+  ludo: { label: "Ludo", url: "games/ludo/" },
+  trilha: { label: "Trilha", url: "games/trilha/" },
+  "resta-um": { label: "Resta Um", url: "games/resta-um/" },
+  "jogo-da-velha": { label: "Jogo da Velha", url: "games/jogo-da-velha/" }
 };
 
 let auth;
 let currentUser = null;
 
-function qs(selector) { return document.querySelector(selector); }
+function qs(selector) {
+  return document.querySelector(selector);
+}
+
 function showScreen(name) {
   document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
   qs("#screen-" + name).classList.add("active");
 }
-function setText(selector, value) { const node = qs(selector); if (node) node.textContent = value || ""; }
-function showError(message) { setText("#auth-error", message || ""); }
-function initials(name) {
-  return String(name || "?").trim().split(/\s+/).slice(0, 2).map(part => part[0] ? part[0].toUpperCase() : "").join("") || "?";
+
+function setText(selector, value) {
+  const node = qs(selector);
+  if (node) node.textContent = value || "";
 }
+
+function showError(message) {
+  setText("#auth-error", message || "");
+}
+
+function initials(name) {
+  return String(name || "?")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0] ? part[0].toUpperCase() : "")
+    .join("") || "?";
+}
+
 function authMessage(error) {
   const messages = {
     "auth/user-not-found": "Usuário não encontrado.",
@@ -39,9 +59,11 @@ function authMessage(error) {
   };
   return messages[error && error.code] || "Não foi possível autenticar.";
 }
+
 function updateUserHeader(user) {
   const displayName = user.displayName || (user.email ? user.email.split("@")[0] : "Jogador");
   setText("#header-username", displayName);
+
   const photo = qs("#header-photo");
   const fallback = qs("#header-initials");
   if (photo && fallback) {
@@ -57,6 +79,7 @@ function updateUserHeader(user) {
     }
   }
 }
+
 function openGame(gameKey) {
   if (!currentUser) {
     showScreen("auth");
@@ -68,25 +91,40 @@ function openGame(gameKey) {
   localStorage.setItem("jogos:lastGame", gameKey);
   window.location.href = game.url;
 }
+
 async function loginWithEmail() {
   const email = qs("#login-email").value.trim();
   const password = qs("#login-password").value;
-  if (!email || !password) { showError("Preencha e-mail e senha."); return; }
-  try { showError(""); await auth.signInWithEmailAndPassword(email, password); }
-  catch (error) { showError(authMessage(error)); }
+  if (!email || !password) {
+    showError("Preencha e-mail e senha.");
+    return;
+  }
+  try {
+    showError("");
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (error) {
+    showError(authMessage(error));
+  }
 }
+
 async function registerWithEmail() {
   const name = qs("#reg-name").value.trim();
   const email = qs("#reg-email").value.trim();
   const password = qs("#reg-password").value;
-  if (!name || !email || password.length < 6) { showError("Informe nome, e-mail e senha com pelo menos 6 caracteres."); return; }
+  if (!name || !email || password.length < 6) {
+    showError("Informe nome, e-mail e senha com pelo menos 6 caracteres.");
+    return;
+  }
   try {
     showError("");
     const credential = await auth.createUserWithEmailAndPassword(email, password);
     await credential.user.updateProfile({ displayName: name });
     updateUserHeader(credential.user);
-  } catch (error) { showError(authMessage(error)); }
+  } catch (error) {
+    showError(authMessage(error));
+  }
 }
+
 async function loginWithGoogle() {
   try {
     showError("");
@@ -97,6 +135,7 @@ async function loginWithGoogle() {
     if (message) showError(message);
   }
 }
+
 function bindAuthTabs() {
   document.querySelectorAll(".auth-tab").forEach(tab => {
     tab.addEventListener("click", () => {
@@ -109,27 +148,41 @@ function bindAuthTabs() {
     });
   });
 }
+
 function bindActions() {
   qs("#btn-login-email").addEventListener("click", loginWithEmail);
-  qs("#login-password").addEventListener("keydown", event => { if (event.key === "Enter") loginWithEmail(); });
+  qs("#login-password").addEventListener("keydown", event => {
+    if (event.key === "Enter") loginWithEmail();
+  });
   qs("#btn-register").addEventListener("click", registerWithEmail);
   qs("#btn-login-google").addEventListener("click", loginWithGoogle);
   qs("#btn-register-google").addEventListener("click", loginWithGoogle);
   qs("#btn-logout").addEventListener("click", () => auth.signOut());
+
   document.querySelectorAll("[data-open-game]").forEach(button => {
     button.addEventListener("click", () => openGame(button.dataset.openGame));
   });
-  qs("#btn-open-last").addEventListener("click", () => openGame(localStorage.getItem("jogos:lastGame") || "xadrez"));
+
+  qs("#btn-open-last").addEventListener("click", () => {
+    openGame(localStorage.getItem("jogos:lastGame") || "xadrez");
+  });
 }
+
 window.addEventListener("DOMContentLoaded", () => {
   firebase.initializeApp(FIREBASE_CONFIG);
   auth = firebase.auth();
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
   bindAuthTabs();
   bindActions();
+
   auth.onAuthStateChanged(user => {
     currentUser = user;
-    if (user) { updateUserHeader(user); showScreen("hub"); }
-    else { showScreen("auth"); }
+    if (user) {
+      updateUserHeader(user);
+      showScreen("hub");
+    } else {
+      showScreen("auth");
+    }
   });
 });

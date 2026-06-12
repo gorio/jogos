@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trilha Online</title>
+  <link rel="stylesheet" href="../_shared/board-game.css" />
+  <style>
+    .trilha-board {
+      width: min(92vw, 620px);
+      aspect-ratio: 1;
+      position: relative;
+      background: #f0d8a8;
+      border: 5px solid #1b1b1b;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.28), 0 24px 52px rgba(0,0,0,0.36);
+    }
+    .line {
+      position: absolute;
+      background: #111;
+      transform-origin: center;
+    }
+    .h { height: 4px; }
+    .v { width: 4px; }
+    .node {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 3px solid #111;
+      border-radius: 50%;
+      background: #f8e7bd;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      z-index: 3;
+    }
+    .node:hover { outline: 4px solid rgba(233,180,76,0.4); }
+    .node.selected { outline: 5px solid rgba(79,178,134,0.72); }
+    .node.valid { box-shadow: 0 0 0 5px rgba(79,178,134,0.38); }
+    .piece {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      box-shadow: 0 4px 9px rgba(0,0,0,0.42), inset 0 1px 2px rgba(255,255,255,0.38);
+    }
+    .piece.white { background: linear-gradient(#fff, #d8d8d8); border: 2px solid #a8a8a8; }
+    .piece.black { background: linear-gradient(#444, #050505); border: 2px solid #000; }
+    .remove-mode .node.enemy .piece { box-shadow: 0 0 0 5px rgba(238,93,90,0.55), 0 4px 9px rgba(0,0,0,0.42); }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="game-topbar">
+      <a class="back-link" href="../../">Voltar ao portal</a>
+      <div class="game-title"><span>◎</span> Trilha</div>
+      <div class="topbar-actions">
+        <button id="btn-reset" class="btn btn-secondary">Nova partida</button>
+      </div>
+    </header>
+
+    <section class="game-page">
+      <aside class="side-panel">
+        <div class="intro">
+          <p class="eyebrow">Estratégia de alinhamento</p>
+          <h1>Trilha</h1>
+          <p>Coloque peças, forme moinhos de três e remova peças adversárias. Depois da colocação, mova pelas linhas do tabuleiro.</p>
+        </div>
+
+        <div class="status-card">
+          <span class="status-label">Estado da partida</span>
+          <div id="status" class="status-value">Carregando...</div>
+          <div class="metric-grid">
+            <div class="metric"><strong id="white-left">9</strong><span>Brancas para colocar</span></div>
+            <div class="metric"><strong id="black-left">9</strong><span>Pretas para colocar</span></div>
+            <div class="metric"><strong id="phase">Colocação</strong><span>Fase</span></div>
+          </div>
+        </div>
+
+        <div class="rules-card">
+          <h2>Regras nesta versão</h2>
+          <ol>
+            <li>Dois jogadores alternam no mesmo dispositivo.</li>
+            <li>Ao formar uma linha de três, remova uma peça adversária.</li>
+            <li>Na fase de movimento, selecione uma peça e depois uma casa vizinha.</li>
+            <li>Com três peças, o jogador pode voar para qualquer casa livre.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <section class="board-stage">
+        <div id="board" class="trilha-board" aria-label="Tabuleiro de Trilha"></div>
+      </section>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

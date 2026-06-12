@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resta Um Online</title>
+  <link rel="stylesheet" href="../_shared/board-game.css" />
+  <style>
+    .peg-board {
+      width: min(92vw, 560px);
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #4a3124;
+      border: 5px solid #15100c;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 24px 52px rgba(0,0,0,0.36);
+    }
+    .hole {
+      border: 0;
+      border-radius: 50%;
+      background: #2a1b14;
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      aspect-ratio: 1;
+    }
+    .hole.invalid {
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .hole.valid { outline: 4px solid rgba(79,178,134,0.52); }
+    .hole.selected { outline: 4px solid rgba(233,180,76,0.72); }
+    .peg {
+      width: 72%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 28%, #fff0c8, #d08c32 48%, #8a4b18);
+      border: 2px solid rgba(255,255,255,0.28);
+      box-shadow: 0 8px 14px rgba(0,0,0,0.38), inset 0 2px 4px rgba(255,255,255,0.36);
+    }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <header class="game-topbar">
+      <a class="back-link" href="../../">Voltar ao portal</a>
+      <div class="game-title"><span>●</span> Resta Um</div>
+      <div class="topbar-actions">
+        <button id="btn-undo" class="btn">Desfazer</button>
+        <button id="btn-reset" class="btn btn-secondary">Reiniciar</button>
+      </div>
+    </header>
+
+    <section class="game-page">
+      <aside class="side-panel">
+        <div class="intro">
+          <p class="eyebrow">Quebra-cabeça clássico</p>
+          <h1>Resta Um</h1>
+          <p>Salte uma peça sobre outra para removê-la. O objetivo é terminar com apenas uma peça no centro.</p>
+        </div>
+
+        <div class="status-card">
+          <span class="status-label">Progresso</span>
+          <div id="status" class="status-value">Escolha uma peça</div>
+          <div class="metric-grid">
+            <div class="metric"><strong id="peg-count">32</strong><span>Peças</span></div>
+            <div class="metric"><strong id="move-count">0</strong><span>Jogadas</span></div>
+            <div class="metric"><strong id="best-state">-</strong><span>Resultado</span></div>
+          </div>
+        </div>
+
+        <div class="rules-card">
+          <h2>Como jogar</h2>
+          <ol>
+            <li>Selecione uma peça.</li>
+            <li>Escolha uma casa vazia a duas posições de distância.</li>
+            <li>A peça pulada é removida.</li>
+            <li>Vença deixando uma única peça no tabuleiro.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <section class="board-stage">
+        <div id="board" class="peg-board" aria-label="Tabuleiro de Resta Um"></div>
+      </section>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
