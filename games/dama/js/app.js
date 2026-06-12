@@ -98,7 +98,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (hPhoto)    { hPhoto.src = ''; hPhoto.classList.add('hidden'); }
       if (hInitials) { hInitials.style.display = 'flex'; hInitials.textContent = '?'; }
       window._myPhotoURL = null;
-      showScreen('auth');
+      window.location.href = '../../';
     }
   });
 });
