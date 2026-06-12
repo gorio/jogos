@@ -6,6 +6,7 @@
   <title>Ludo Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎲</text></svg>">
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1235" />
   <style>
     .ludo-board {
       border: 4px solid #050505;
@@ -145,8 +146,8 @@
           <div class="mode-selector">
             <button class="mode-btn active" data-mode="multiplayer">
               <span class="mode-icon">👥</span>
-              <span class="mode-label">Multijogador</span>
-              <span class="mode-desc">Jogue contra amigos</span>
+              <span class="mode-label">Jogador online</span>
+              <span class="mode-desc">Crie ou entre em uma sala</span>
             </button>
             <button class="mode-btn" data-mode="ai">
               <span class="mode-icon">🤖</span>
@@ -164,7 +165,7 @@
                 <button class="seg-btn" data-count="4">4</button>
               </div>
             </div>
-            <button id="btn-create-room" class="btn btn-primary btn-full">Criar Partida</button>
+            <button id="btn-create-room" class="btn btn-primary btn-full">Criar sala online</button>
             <div class="divider"><span>ou entre em uma sala</span></div>
             <div class="join-group">
               <input id="input-room" type="text" placeholder="Código da sala" maxlength="6" />

@@ -6,6 +6,7 @@
   <title>Xadrez Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>♟</text></svg>">
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1235" />
 </head>
 <body>
 
@@ -105,8 +106,8 @@
           <div class="mode-selector">
             <button class="mode-btn active" data-mode="multiplayer">
               <span class="mode-icon">👥</span>
-              <span class="mode-label">Multijogador</span>
-              <span class="mode-desc">Jogue contra um amigo</span>
+              <span class="mode-label">Jogador online</span>
+              <span class="mode-desc">Crie ou entre em uma sala</span>
             </button>
             <button class="mode-btn" data-mode="ai">
               <span class="mode-icon">🤖</span>
@@ -117,7 +118,7 @@
 
           <!-- Painel Multiplayer -->
           <div id="panel-multiplayer" class="mode-panel">
-            <button id="btn-create" class="btn btn-primary btn-full">Criar Partida</button>
+            <button id="btn-create" class="btn btn-primary btn-full">Criar sala online</button>
             <div class="divider"><span>ou entre em uma sala</span></div>
             <div class="join-group">
               <input id="input-room" type="text" placeholder="Código da sala" maxlength="6" />

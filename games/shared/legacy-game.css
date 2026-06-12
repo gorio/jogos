@@ -1,0 +1,305 @@
+:root {
+  --bg: #10111a;
+  --surface: #171a26;
+  --surface2: #202638;
+  --accent: #e9b44c;
+  --accent2: #4fb286;
+  --text: #f7f4ea;
+  --text-muted: #a7adbb;
+  --line: rgba(255,255,255,0.12);
+  --radius: 8px;
+  --shadow: 0 18px 44px rgba(0,0,0,0.3);
+  --board-size: min(560px, 44vw, calc(100vh - 190px));
+  --ludo-board-size: min(560px, 44vw, calc(100vh - 190px));
+  --ludo-cell-size: calc(var(--ludo-board-size) / 15);
+}
+
+body {
+  color: var(--text);
+  background: radial-gradient(circle at 12% 8%, rgba(79,178,134,0.18), transparent 30%),
+              radial-gradient(circle at 86% 0%, rgba(233,180,76,0.16), transparent 28%),
+              var(--bg) !important;
+}
+
+.screen {
+  background: transparent !important;
+}
+
+.auth-container,
+.lobby-container,
+.waiting-container {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(23,26,38,0.92) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.auth-container,
+.lobby-container {
+  width: min(520px, calc(100vw - 32px)) !important;
+  padding: 28px !important;
+}
+
+.logo {
+  margin-bottom: 20px !important;
+}
+
+.logo h1 {
+  font-size: clamp(28px, 4vw, 40px) !important;
+  line-height: 1.05 !important;
+}
+
+.logo p,
+.mode-desc,
+.waiting-container p {
+  color: var(--text-muted) !important;
+}
+
+.app-header {
+  min-height: 58px !important;
+  padding: 0 clamp(16px, 3vw, 36px) !important;
+  border-bottom: 1px solid var(--line) !important;
+  background: rgba(8,9,16,0.78) !important;
+  backdrop-filter: blur(16px);
+}
+
+.header-logo {
+  font-size: 18px !important;
+}
+
+.header-user {
+  gap: 10px !important;
+}
+
+.btn {
+  border-radius: var(--radius) !important;
+  font-weight: 850 !important;
+}
+
+.btn-primary {
+  background: var(--accent) !important;
+  color: #15110a !important;
+  border-color: transparent !important;
+}
+
+.btn-secondary {
+  background: rgba(79,178,134,0.15) !important;
+  border-color: rgba(79,178,134,0.32) !important;
+  color: #d8ffe9 !important;
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: var(--line) !important;
+  color: var(--text-muted) !important;
+}
+
+.lobby-body {
+  min-height: calc(100vh - 58px) !important;
+  padding: 28px 16px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.mode-selector {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin: 16px 0 !important;
+}
+
+.mode-btn {
+  min-height: 74px !important;
+  padding: 12px !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(32,38,56,0.86) !important;
+  color: var(--text) !important;
+  text-align: left !important;
+}
+
+.mode-btn.active {
+  background: var(--accent) !important;
+  color: #15110a !important;
+  border-color: transparent !important;
+}
+
+.mode-icon {
+  display: none !important;
+}
+
+.mode-label {
+  font-weight: 900 !important;
+  font-size: 14px !important;
+}
+
+.mode-desc {
+  display: block !important;
+  margin-top: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.mode-panel {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(255,255,255,0.035) !important;
+  padding: 14px !important;
+}
+
+.join-group {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 8px !important;
+}
+
+.join-group input,
+.form-input,
+select {
+  min-height: 38px !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--text) !important;
+}
+
+.waiting-container {
+  width: min(460px, calc(100vw - 32px)) !important;
+}
+
+.room-code-box {
+  border-radius: var(--radius) !important;
+  border: 1px dashed rgba(233,180,76,0.48) !important;
+  background: rgba(233,180,76,0.1) !important;
+}
+
+#display-room-code {
+  color: var(--accent) !important;
+}
+
+.game-layout {
+  width: fit-content !important;
+  max-width: calc(100vw - 32px) !important;
+  min-height: auto !important;
+  margin: 0 auto !important;
+  padding: clamp(16px, 2.8vw, 30px) !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(280px, 330px) !important;
+  gap: clamp(16px, 2vw, 24px) !important;
+  align-items: start !important;
+}
+
+.board-area {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(23,26,38,0.68) !important;
+  box-shadow: var(--shadow) !important;
+  padding: 14px !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 12px !important;
+  align-self: start !important;
+}
+
+.game-sidebar {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  max-width: 330px !important;
+  height: auto !important;
+  display: grid !important;
+  gap: 12px !important;
+}
+
+.player-card,
+.move-history-box,
+.players-panel,
+.status-bar,
+.dice-display {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  background: rgba(23,26,38,0.92) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.16) !important;
+}
+
+.status-bar {
+  min-height: 38px !important;
+  padding: 10px 12px !important;
+  color: var(--text) !important;
+}
+
+.board-wrapper,
+.chessboard,
+.ludo-board {
+  max-width: 100% !important;
+}
+
+.chessboard {
+  width: var(--board-size) !important;
+  height: var(--board-size) !important;
+}
+
+.ludo-board {
+  width: var(--ludo-board-size) !important;
+  height: var(--ludo-board-size) !important;
+}
+
+.game-controls {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.move-history-box {
+  min-height: 180px !important;
+  max-height: min(36vh, 260px) !important;
+}
+
+.move-history {
+  max-height: min(28vh, 210px) !important;
+}
+
+.history-layout,
+.modal-box {
+  background: rgba(23,26,38,0.94) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --board-size: min(92vw, 540px);
+    --ludo-board-size: min(92vw, 540px);
+  }
+
+  .game-layout {
+    width: min(100%, 620px) !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .board-area,
+  .game-sidebar {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    justify-self: center !important;
+  }
+
+  .game-sidebar {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .mode-selector,
+  .join-group {
+    grid-template-columns: 1fr !important;
+  }
+
+  .auth-container,
+  .lobby-container {
+    padding: 22px !important;
+  }
+}
