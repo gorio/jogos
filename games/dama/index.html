@@ -85,9 +85,28 @@
     .status-card .mode-selector {
       margin: 0 !important;
     }
+    .status-card .mode-btn {
+      min-width: 0 !important;
+      align-content: start !important;
+      justify-items: start !important;
+      text-align: left !important;
+      outline: 0 !important;
+      grid-template-rows: auto auto !important;
+    }
+    .status-card .mode-btn:focus-visible {
+      box-shadow: 0 0 0 2px rgba(233,180,76,0.42) !important;
+    }
+    .status-card .mode-label {
+      width: 100% !important;
+      text-align: left !important;
+      white-space: nowrap !important;
+    }
     .status-card .mode-btn .mode-desc {
       color: inherit !important;
       opacity: 0.72 !important;
+      width: 100% !important;
+      text-align: left !important;
+      overflow-wrap: normal !important;
     }
     .status-card .mode-btn.active .mode-desc {
       color: #15110a !important;
