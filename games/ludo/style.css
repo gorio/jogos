@@ -516,7 +516,7 @@ body {
 }
 .red-base,
 .blue-base,
-.green-base,
+green-base,
 .yellow-base,
 .neutral-path,
 .red-entry,
@@ -565,7 +565,7 @@ body {
 .center-final {
   background:
     conic-gradient(
-      from 45deg,
+      from -45deg,
       var(--ludo-blue) 0 25%,
       var(--ludo-green) 0 50%,
       var(--ludo-yellow) 0 75%,
@@ -584,7 +584,7 @@ body {
   content: '★';
   position: absolute;
   font-size: calc(var(--ludo-cell-size) * 0.55);
-  color: var(--accent2);
+  color: #f6c945;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
 }
 .pawn {
