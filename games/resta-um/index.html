@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resta Um Online</title>
-  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1210" />
+  <link rel="stylesheet" href="../shared/board-game.css?v=20260612-1435" />
   <style>
     :root {
-      --board-size: min(520px, 41vw, calc(100vh - 210px));
+      --board-size: min(640px, calc(100vw - 430px), calc(100svh - 150px));
     }
     .peg-board {
       width: var(--board-size);
@@ -49,7 +49,10 @@
       box-shadow: 0 8px 14px rgba(0,0,0,0.38), inset 0 2px 4px rgba(255,255,255,0.36);
     }
     @media (max-width: 900px) {
-      :root { --board-size: min(92vw, 520px); }
+      :root { --board-size: min(calc(100vw - 32px), 680px); }
+    }
+    @media (max-width: 560px) {
+      :root { --board-size: min(calc(100vw - 24px), 560px); }
     }
   </style>
 </head>
