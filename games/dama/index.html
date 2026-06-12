@@ -6,7 +6,83 @@
   <title>Dama Online</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>⬛</text></svg>">
   <link rel="stylesheet" href="css/style.css?v=20260612-1320" />
-  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1435" />
+  <link rel="stylesheet" href="../shared/legacy-game.css?v=20260612-1605" />
+  <style>
+    .lobby-container:has(.lobby-preview) > .intro,
+    .lobby-container:has(.lobby-preview) > .status-card,
+    .lobby-container:has(.lobby-preview) > .rules-card {
+      grid-column: 2 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+    .status-card,
+    .rules-card,
+    .intro {
+      background: rgba(23,26,38,0.92) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius) !important;
+      padding: 14px !important;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16) !important;
+    }
+    .status-card { order: 1 !important; display: grid !important; gap: 10px !important; }
+    .rules-card { order: 3 !important; }
+    .intro { order: 4 !important; display: grid !important; gap: 6px !important; background: rgba(23,26,38,0.72) !important; }
+    .status-label,
+    .eyebrow {
+      color: var(--text-muted) !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+    }
+    .eyebrow { color: var(--accent) !important; margin: 0 !important; }
+    .status-value {
+      min-height: 34px !important;
+      color: var(--text) !important;
+      font-size: 19px !important;
+      font-weight: 850 !important;
+      line-height: 1.2 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .rules-card h2,
+    .intro h1 {
+      margin: 0 0 8px !important;
+      color: var(--text) !important;
+      font-size: 18px !important;
+      line-height: 1.15 !important;
+    }
+    .intro p,
+    .rules-card ol {
+      color: var(--text-muted) !important;
+      line-height: 1.5 !important;
+      font-size: 15px !important;
+    }
+    .rules-card ol {
+      margin: 0 !important;
+      padding-left: 20px !important;
+    }
+    .room-code {
+      min-height: 38px !important;
+      border-radius: var(--radius) !important;
+      border: 1px dashed rgba(233,180,76,0.48) !important;
+      background: rgba(233,180,76,0.1) !important;
+      color: var(--accent) !important;
+      display: none !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 900 !important;
+      letter-spacing: 0.1em !important;
+    }
+    .room-code.active { display: flex !important; }
+    .panel-note {
+      min-height: 18px;
+      color: var(--text-muted) !important;
+      font-size: 13px !important;
+      line-height: 1.4 !important;
+      text-align: left !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -103,81 +179,87 @@
             <div class="coords-file"></div>
           </div>
         </div>
-        <div class="logo">
-          <span class="logo-icon">⬛</span>
-          <h1>Nova Partida</h1>
+        <div class="intro">
+          <p class="eyebrow">Estratégia clássica</p>
+          <h1>Dama</h1>
+          <p>Capture as peças adversárias em diagonais e promova suas peças ao chegar no lado oposto.</p>
         </div>
 
-        <!-- Seletor de modo -->
-        <div class="mode-selector">
-          <button class="mode-btn active" data-mode="multiplayer">
-            <span class="mode-icon">👥</span>
-            <span class="mode-label">Jogador online</span>
-            <span class="mode-desc">Crie ou entre em uma sala</span>
-          </button>
-          <button class="mode-btn" data-mode="ai">
-            <span class="mode-icon">🤖</span>
-            <span class="mode-label">vs Computador</span>
-            <span class="mode-desc">Jogue contra a IA</span>
-          </button>
-        </div>
-
-        <!-- Painel Multiplayer -->
-        <div id="panel-multiplayer" class="mode-panel">
-          <button id="btn-create" class="btn btn-primary btn-full">Criar sala online</button>
-          <div class="divider"><span>ou entre em uma sala</span></div>
-          <div class="join-group">
-            <input id="input-room" type="text" placeholder="CÓDIGO" maxlength="6" />
-            <button id="btn-join" class="btn btn-secondary">Entrar</button>
+        <div class="status-card">
+          <span class="status-label">Estado da partida</span>
+          <div id="lobby-status" class="status-value">Crie ou entre em uma sala</div>
+          <div class="mode-selector">
+            <button class="mode-btn active" data-mode="multiplayer">
+              <span class="mode-label">Jogador online</span>
+              <span class="mode-desc">Crie ou entre em uma sala</span>
+            </button>
+            <button class="mode-btn" data-mode="ai">
+              <span class="mode-label">vs Computador</span>
+              <span class="mode-desc">Jogue contra a IA</span>
+            </button>
           </div>
-          <div class="divider"><span>ou assista uma partida</span></div>
-          <div class="join-group">
-            <input id="input-spectate" type="text" placeholder="CÓDIGO" maxlength="6" />
-            <button id="btn-spectate" class="btn btn-ghost">👁 Assistir</button>
-          </div>
-        </div>
 
-        <!-- Painel IA -->
-        <div id="panel-ai" class="mode-panel hidden">
-          <div class="ai-options">
-            <div class="option-group">
-              <span class="option-label">Jogar como</span>
-              <div class="color-selector">
-                <button class="color-btn active" data-color="w">⬜ Brancas</button>
-                <button class="color-btn"        data-color="random">🎲 Aleatório</button>
-                <button class="color-btn"        data-color="b">⬛ Pretas</button>
+          <div id="panel-multiplayer" class="mode-panel">
+            <button id="btn-create" class="btn btn-primary btn-full">Criar sala online</button>
+            <div id="join-room-row" class="join-group">
+              <input id="input-room" type="text" placeholder="CÓDIGO" maxlength="6" />
+              <button id="btn-join" class="btn btn-secondary">Entrar</button>
+            </div>
+            <div id="current-room-code" class="room-code"></div>
+            <button id="btn-invite-room" class="btn btn-secondary btn-full hidden">Convidar jogador</button>
+            <p id="lobby-error" class="panel-note">Entre pelo portal para jogar online com outro jogador.</p>
+          </div>
+
+          <div id="panel-ai" class="mode-panel hidden">
+            <div class="ai-options">
+              <div class="option-group">
+                <span class="option-label">Jogar como</span>
+                <div class="color-selector">
+                  <button class="color-btn active" data-color="w">⬜ Brancas</button>
+                  <button class="color-btn" data-color="random">🎲 Aleatório</button>
+                  <button class="color-btn" data-color="b">⬛ Pretas</button>
+                </div>
+              </div>
+              <div class="option-group">
+                <span class="option-label">Dificuldade</span>
+                <div class="difficulty-selector">
+                  <button class="diff-btn" data-level="iniciante">
+                    <span class="diff-name">Iniciante</span>
+                    <span class="diff-desc">Para aprender</span>
+                    <span class="diff-stars">★☆☆☆</span>
+                  </button>
+                  <button class="diff-btn active" data-level="intermediario">
+                    <span class="diff-name">Intermediário</span>
+                    <span class="diff-desc">Desafiador</span>
+                    <span class="diff-stars">★★☆☆</span>
+                  </button>
+                  <button class="diff-btn" data-level="avancado">
+                    <span class="diff-name">Avançado</span>
+                    <span class="diff-desc">Difícil</span>
+                    <span class="diff-stars">★★★☆</span>
+                  </button>
+                  <button class="diff-btn" data-level="expert">
+                    <span class="diff-name">Expert</span>
+                    <span class="diff-desc">Implacável</span>
+                    <span class="diff-stars">★★★★</span>
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="option-group">
-              <span class="option-label">Dificuldade</span>
-              <div class="difficulty-selector">
-                <button class="diff-btn" data-level="iniciante">
-                  <span class="diff-name">Iniciante</span>
-                  <span class="diff-desc">Para aprender</span>
-                  <span class="diff-stars">★☆☆☆</span>
-                </button>
-                <button class="diff-btn active" data-level="intermediario">
-                  <span class="diff-name">Intermediário</span>
-                  <span class="diff-desc">Desafiador</span>
-                  <span class="diff-stars">★★☆☆</span>
-                </button>
-                <button class="diff-btn" data-level="avancado">
-                  <span class="diff-name">Avançado</span>
-                  <span class="diff-desc">Difícil</span>
-                  <span class="diff-stars">★★★☆</span>
-                </button>
-                <button class="diff-btn" data-level="expert">
-                  <span class="diff-name">Expert</span>
-                  <span class="diff-desc">Implacável</span>
-                  <span class="diff-stars">★★★★</span>
-                </button>
-              </div>
-            </div>
+            <button id="btn-start-ai" class="btn btn-primary btn-full">Iniciar Partida</button>
           </div>
-          <button id="btn-start-ai" class="btn btn-primary btn-full">Iniciar Partida</button>
         </div>
 
-        <p id="lobby-error" class="error-msg"></p>
+        <div class="rules-card">
+          <h2>Como jogar Dama</h2>
+          <ol>
+            <li>As peças se movem uma casa na diagonal para frente.</li>
+            <li>Para capturar, salte na diagonal sobre uma peça adversária para uma casa vazia.</li>
+            <li>Capturas disponíveis devem ser feitas quando existirem.</li>
+            <li>Ao chegar na última linha, a peça vira dama e pode andar para frente e para trás.</li>
+            <li>Vence quem capturar todas as peças adversárias ou deixar o rival sem movimentos.</li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>
@@ -358,6 +440,7 @@
   <script src="js/dama-engine.js?v=20260612-1320"></script>
   <script src="js/ai.js?v=20260612-1320"></script>
   <script src="../shared/legacy-lobby.js?v=20260612-1320"></script>
-  <script src="js/app.js?v=20260612-1320"></script>
+  <script src="js/app.js?v=20260612-1705"></script>
+  <script src="js/lobby-panel.js?v=20260612-1705"></script>
 </body>
 </html>
