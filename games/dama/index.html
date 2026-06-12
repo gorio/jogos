@@ -54,7 +54,7 @@
     }
     .intro p,
     .rules-card ol {
-      color: var(--text-muted) !important;
+      color: #c3c8d4 !important;
       line-height: 1.5 !important;
       font-size: 15px !important;
     }
@@ -77,10 +77,36 @@
     .room-code.active { display: flex !important; }
     .panel-note {
       min-height: 18px;
-      color: var(--text-muted) !important;
+      color: #c3c8d4 !important;
       font-size: 13px !important;
       line-height: 1.4 !important;
       text-align: left !important;
+    }
+    .status-card .mode-selector {
+      margin: 0 !important;
+    }
+    .status-card .mode-btn .mode-desc {
+      color: inherit !important;
+      opacity: 0.72 !important;
+    }
+    .status-card .mode-btn.active .mode-desc {
+      color: #15110a !important;
+      opacity: 0.82 !important;
+    }
+    .status-card .mode-panel {
+      border-radius: var(--radius) !important;
+      border: 1px solid var(--line) !important;
+      background: rgba(255,255,255,0.035) !important;
+      padding: 14px !important;
+      gap: 10px !important;
+    }
+    .status-card .option-label,
+    .status-card .diff-desc {
+      color: #c3c8d4 !important;
+    }
+    .status-card .diff-btn.active .diff-desc {
+      color: #15110a !important;
+      opacity: 0.82 !important;
     }
   </style>
 </head>
